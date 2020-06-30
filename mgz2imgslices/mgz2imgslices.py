@@ -187,7 +187,7 @@ class Mgz2imgslices(ChrisApp):
 
         mgz_vol = nib.load("%s/%s" % (options.inputdir, options.inputFile))
 
-        convert_to_np = mgz_vol.get_fdate()
+        convert_to_np = mgz_vol.get_fdata()
 
         print(mgz_vol)
         print(convert_to_np)
