@@ -20,9 +20,14 @@ from chrisapp.base import ChrisApp
 
 Gstr_title = """
 
-Generate a title from 
-http://patorjk.com/software/taag/#p=display&f=Doom&t=mgz2imgslices
-
+                      _____ _                     _ _               
+                     / __  (_)                   | (_)              
+ _ __ ___   __ _ ____`' / /'_ _ __ ___   __ _ ___| |_  ___ ___  ___ 
+| '_ ` _ \ / _` |_  /  / / | | '_ ` _ \ / _` / __| | |/ __/ _ \/ __|
+| | | | | | (_| |/ / ./ /__| | | | | | | (_| \__ \ | | (_|  __/\__ \
+|_| |_| |_|\__, /___|\_____/_|_| |_| |_|\__, |___/_|_|\___\___||___/
+            __/ |                        __/ |                      
+           |___/                        |___/                       
 """
 
 Gstr_synopsis = """
@@ -40,6 +45,10 @@ where necessary.)
     SYNOPSIS
 
         python mgz2imgslices.py                                         \\
+            [-i] [--inputFile] <inputFile>                              \\
+            [-o] [--outputFileStem] <outputFileStem>                    \\
+            [-t] [--outputFileType] <outputFileType>                    \\
+            [-n] [--normalize]                                          \\
             [-h] [--help]                                               \\
             [--json]                                                    \\
             [--man]                                                     \\
@@ -47,6 +56,7 @@ where necessary.)
             [--savejson <DIR>]                                          \\
             [-v <level>] [--verbosity <level>]                          \\
             [--version]                                                 \\
+            [-y] [--synopsis]                                           \\
             <inputDir>                                                  \\
             <outputDir> 
 
@@ -63,6 +73,21 @@ where necessary.)
         `mgz2imgslices.py` ...
 
     ARGS
+
+        [-i] [--inputFile] <inputFile>
+        Input file to convert. Should be a .mgz file
+
+        [-o] [--outputFileStem] <outputFileStem>
+        The output file stem to store conversion. If this is specified
+        with an extension, this extension will be used to specify the
+        output file type.
+
+        [-t] [--outputFileType] <outputFileType>
+        The output file type. If different to <outputFileStem> extension,
+        will override extension in favour of <outputFileType>. Should be a 'png' or 'jpg'
+
+        [-n] [--normalize]
+        If specified, will normalize the output image pixels to 0 and 1 values.
 
         [-h] [--help]
         If specified, show help message and exit.
@@ -85,6 +110,9 @@ where necessary.)
         [--version]
         If specified, print version number and exit. 
 
+        [-y] [--synopsis]
+        Show short synopsis.
+
 """
 
 
@@ -99,8 +127,8 @@ class Mgz2imgslices(ChrisApp):
     TITLE                   = 'A ChRIS plugin app that converts mgz files to png or jpeg alongwith some special features that make it usable even as part of other project workflows.'
     CATEGORY                = ''
     TYPE                    = 'ds'
-    DESCRIPTION             = 'An app to ...'
-    DOCUMENTATION           = 'http://wiki'
+    DESCRIPTION             = 'An app to convert mgz volumes to png or jpeg (more easilt viewable) formats'
+    DOCUMENTATION           = 'https://github.com/FNNDSC/pl-mgz2imgslices'
     VERSION                 = '0.1'
     ICON                    = '' # url of an icon image
     LICENSE                 = 'Opensource (MIT)'
@@ -131,6 +159,22 @@ class Mgz2imgslices(ChrisApp):
         Define the CLI arguments accepted by this plugin app.
         Use self.add_argument to specify a new app argument.
         """
+
+        self.add_argument('-i', '--inputFile', dest='inputFile', type=str,
+                          optional=False, help='name of the input file within the inputDir')
+
+        self.add_argument('-o', '--outputFileStem', dest='outputFileStem', type=str, optional=True,
+                          help='output file', default='sample')
+
+        self.add_argument('-t', '--outputFileType', dest='outputFileType', type=str,
+                          default='jpg', optional=True, help='output image file format')
+
+        self.add_argument('-n', '--normalize', dest='normalize', type=bool, 
+                            default='False', optional=True, help='normalize the pixels of output image files')
+
+        self.add_argument('-y', '--synopsis', dest='synopsis', type=bool, action='store_true',
+                          default=False, optional=True, help='short synopsis')
+
 
     def run(self, options):
         """
