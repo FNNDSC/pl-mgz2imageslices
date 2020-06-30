@@ -12,6 +12,8 @@
 
 import os
 import sys
+import numpy as np
+import nibabel as nib
 sys.path.append(os.path.dirname(__file__))
 
 # import the Chris app superclass
@@ -183,6 +185,13 @@ class Mgz2imgslices(ChrisApp):
         print(Gstr_title)
         print('Version: %s' % self.get_version())
 
+        mgz_vol = nib.load("%s/%s" % (options.inputdir, options.inputFile))
+
+        convert_to_np = mgz_vol.get_fdate()
+
+        print(mgz_vol)
+        print(convert_to_np)
+    
     def show_man_page(self):
         """
         Print the app's man page.
