@@ -14,6 +14,7 @@ import os
 import sys
 import numpy as np
 import nibabel as nib
+import imageio
 sys.path.append(os.path.dirname(__file__))
 
 # import the Chris app superclass
@@ -21,8 +22,7 @@ from chrisapp.base import ChrisApp
 
 
 Gstr_title = """
-
-                      _____ _                     _ _               
+                     _____ _                     _ _               
                      / __  (_)                   | (_)              
  _ __ ___   __ _ ____`' / /'_ _ __ ___   __ _ ___| |_  ___ ___  ___ 
 | '_ ` _ \ / _` |_  /  / / | | '_ ` _ \ / _` / __| | |/ __/ _ \/ __|
@@ -191,12 +191,16 @@ class Mgz2imgslices(ChrisApp):
         
         unique, counts = np.unique(convert_to_np, return_counts=True)
         labels = dict(zip(unique, counts))
-        
+
         for item in labels:
-            # print("Key : {} , Value : {}".format(item,labels[item])
             str_dirname = str(int(item))
-            # print(str_dirname)
             os.mkdir("%s/%s" % (options.outputdir, str_dirname))
+
+            #mask voxels other than the current label to 0 values
+            single_label_array = np.where(convert_to_np!=item, 0, item)
+            filename = "%s/%s/np-arr" % (options.outputdir, str_dirname)
+            np.savez_compressed(filename, X=single_label_array) #saving in .npy format only temporarily for testing
+            
             
         
     def show_man_page(self):
