@@ -188,10 +188,13 @@ class Mgz2imgslices(ChrisApp):
         mgz_vol = nib.load("%s/%s" % (options.inputdir, options.inputFile))
 
         convert_to_np = mgz_vol.get_fdata()
-
-        print(mgz_vol)
-        print(convert_to_np)
-    
+        
+        unique, counts = np.unique(convert_to_np, return_counts=True)
+        labels = dict(zip(unique, counts))
+        
+        for item in labels:
+            print("Key : {} , Value : {}".format(item,labels[item]))
+        
     def show_man_page(self):
         """
         Print the app's man page.
