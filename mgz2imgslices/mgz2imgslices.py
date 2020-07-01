@@ -193,7 +193,11 @@ class Mgz2imgslices(ChrisApp):
         labels = dict(zip(unique, counts))
         
         for item in labels:
-            print("Key : {} , Value : {}".format(item,labels[item]))
+            # print("Key : {} , Value : {}".format(item,labels[item])
+            str_dirname = str(int(item))
+            # print(str_dirname)
+            os.mkdir("%s/%s" % (options.outputdir, str_dirname))
+            
         
     def show_man_page(self):
         """
