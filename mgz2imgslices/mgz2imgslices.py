@@ -209,7 +209,7 @@ class Mgz2imgslices(ChrisApp):
 
                 image_name = "%s/%s/%s-%d.png" % (options.outputdir, str_dirname, options.outputFileStem, current_slice)
                 imageio.imwrite(image_name, data)
-               
+
     def show_man_page(self):
         """
         Print the app's man page.
