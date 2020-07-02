@@ -198,11 +198,18 @@ class Mgz2imgslices(ChrisApp):
 
             #mask voxels other than the current label to 0 values
             single_label_array = np.where(convert_to_np!=item, 0, item)
-            filename = "%s/%s/np-arr" % (options.outputdir, str_dirname)
-            np.savez_compressed(filename, X=single_label_array) #saving in .npy format only temporarily for testing
             
-            
-        
+            total_slices = single_label_array.shape[0]
+            # iterate through slices
+            for current_slice in range(0, total_slices):
+                data = single_label_array[:, :, current_slice]
+                
+                # prevents lossy conversion
+                data=data.astype(np.uint16)
+
+                image_name = "%s/%s/%s-%d.png" % (options.outputdir, str_dirname, options.outputFileStem, current_slice)
+                imageio.imwrite(image_name, data)
+               
     def show_man_page(self):
         """
         Print the app's man page.
