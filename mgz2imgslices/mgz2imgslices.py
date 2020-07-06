@@ -172,7 +172,7 @@ class Mgz2imgslices(ChrisApp):
                           default='jpg', optional=True, help='output image file format')
 
         self.add_argument('-n', '--normalize', dest='normalize', type=bool, 
-                            default='False', optional=True, help='normalize the pixels of output image files')
+                            default=False, optional=True, help='normalize the pixels of output image files')
 
         self.add_argument('-y', '--synopsis', dest='synopsis', type=bool, action='store_true',
                           default=False, optional=True, help='short synopsis')
@@ -197,7 +197,10 @@ class Mgz2imgslices(ChrisApp):
             os.mkdir("%s/%s" % (options.outputdir, str_dirname))
 
             #mask voxels other than the current label to 0 values
-            single_label_array = np.where(convert_to_np!=item, 0, item)
+            if(options.normalize):
+                single_label_array = np.where(convert_to_np!=item, 0, 1)
+            else:
+                single_label_array = np.where(convert_to_np!=item, 0, item)
             
             total_slices = single_label_array.shape[0]
             # iterate through slices
