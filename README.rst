@@ -102,15 +102,16 @@ Using ``docker run``
 
 To run using ``docker``, be sure to assign an "input" directory to ``/incoming`` and an output directory to ``/outgoing``. *Make sure that the* ``$(pwd)/out`` *directory is world writable!*
 
-Now, prefix all calls with 
+Now pull the docker image for ``pl-mgz2imgslices`` using the following command:
 
 .. code:: bash
 
-    docker run --rm -v $(pwd)/out:/outgoing                             \
-            fnndsc/pl-mgz2imgslices mgz2imgslices.py                        \
+    docker pull fnndsc/pl-mgz2imgslices
 
-Thus, getting inline help is:
+*work in progress*
 
+Examples
+--------
 .. code:: bash
 
     mkdir in out && chmod 777 out
@@ -118,9 +119,6 @@ Thus, getting inline help is:
             fnndsc/pl-mgz2imgslices mgz2imgslices.py                        \
             --man                                                       \
             /incoming /outgoing
-
-Examples
---------
 
 
 
