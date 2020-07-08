@@ -97,6 +97,8 @@ Arguments
 Run
 ----
 
+Using Docker you can run this application using the following instructions
+
 Using ``docker run``
 ~~~~~~~~~~~~~~~~~~~~
 
