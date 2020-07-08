@@ -22,11 +22,11 @@ from chrisapp.base import ChrisApp
 
 
 Gstr_title = """
-                     _____ _                     _ _               
+                      _____ _                     _ _               
                      / __  (_)                   | (_)              
  _ __ ___   __ _ ____`' / /'_ _ __ ___   __ _ ___| |_  ___ ___  ___ 
 | '_ ` _ \ / _` |_  /  / / | | '_ ` _ \ / _` / __| | |/ __/ _ \/ __|
-| | | | | | (_| |/ / ./ /__| | | | | | | (_| \__ \ | | (_|  __/\__ \
+| | | | | | (_| |/ / ./ /__| | | | | | | (_| \__ \ | | (_|  __/\__ \\
 |_| |_| |_|\__, /___|\_____/_|_| |_| |_|\__, |___/_|_|\___\___||___/
             __/ |                        __/ |                      
            |___/                        |___/                       
@@ -169,7 +169,7 @@ class Mgz2imgslices(ChrisApp):
                           help='output file', default='sample')
 
         self.add_argument('-t', '--outputFileType', dest='outputFileType', type=str,
-                          default='jpg', optional=True, help='output image file format')
+                          default='png', optional=True, help='output image file format')
 
         self.add_argument('-n', '--normalize', dest='normalize', type=bool, 
                             default=False, optional=True, help='normalize the pixels of output image files')
@@ -208,9 +208,10 @@ class Mgz2imgslices(ChrisApp):
                 data = single_label_array[:, :, current_slice]
                 
                 # prevents lossy conversion
-                data=data.astype(np.uint16)
+                data=data.astype(np.uint8)
 
-                image_name = "%s/%s/%s-%d.png" % (options.outputdir, str_dirname, options.outputFileStem, current_slice)
+                image_name = "%s/%s/%s-%d.%s" % (options.outputdir, str_dirname, 
+                    options.outputFileStem, current_slice, options.outputFileType)
                 imageio.imwrite(image_name, data)
 
     def show_man_page(self):
