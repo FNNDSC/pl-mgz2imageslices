@@ -16,7 +16,7 @@ pl-mgz2imgslices
 Abstract
 --------
 
-An app to ...
+A ChRIS pulgin to convert ``.mgz`` files to readable formats like PNGs or JPEGs.
 
 
 Synopsis
@@ -24,63 +24,78 @@ Synopsis
 
 .. code::
 
-    python mgz2imgslices.py                                           \
-        [-v <level>] [--verbosity <level>]                          \
-        [--version]                                                 \
-        [--man]                                                     \
-        [--meta]                                                    \
-        <inputDir>
-        <outputDir> 
+    python mgz2imgslices.py                                         \
+            [-i] [--inputFile] <inputFile>                              \
+            [-o] [--outputFileStem] <outputFileStem>                    \
+            [-t] [--outputFileType] <outputFileType>                    \
+            [-n] [--normalize]                                          \
+            [-h] [--help]                                               \
+            [--json]                                                    \
+            [--man]                                                     \
+            [--meta]                                                    \
+            [--savejson <DIR>]                                          \
+            [-v <level>] [--verbosity <level>]                          \
+            [--version]                                                 \
+            [-y] [--synopsis]                                           \
+            <inputDir>                                                  \
+            <outputDir>  
 
 Description
 -----------
 
-``mgz2imgslices.py`` is a ChRIS-based application that...
+``mgz2imgslices.py`` is a ChRIS-based application that convert ``.mgz`` files to readable formats like PNGs or JPEGs.
+
+It bifurcates all the labels within a ``.mgz`` file and stores all the slices corresponding to each label within individual directories named after the label number. 
+
 
 Arguments
 ---------
 
 .. code::
 
-    [-v <level>] [--verbosity <level>]
-    Verbosity level for app. Not used currently.
+    [-i] [--inputFile] <inputFile>
+        Input file to convert. Should be a .mgz file
 
-    [--version]
-    If specified, print version number. 
+    [-o] [--outputFileStem] <outputFileStem>
+    The output file stem to store conversion. If this is specified
+    with an extension, this extension will be used to specify the
+    output file type.
+
+    [-t] [--outputFileType] <outputFileType>
+    The output file type. If different to <outputFileStem> extension,
+    will override extension in favour of <outputFileType>. Should be a 'png' or 'jpg'
+
+    [-n] [--normalize]
+    If specified, will normalize the output image pixels to 0 and 1 values.
+
+    [-h] [--help]
+    If specified, show help message and exit.
+    
+    [--json]
+    If specified, show json representation of app and exit.
     
     [--man]
-    If specified, print (this) man page.
+    If specified, print (this) man page and exit.
 
     [--meta]
-    If specified, print plugin meta data.
+    If specified, print plugin meta data and exit.
+    
+    [--savejson <DIR>] 
+    If specified, save json representation file to DIR and exit. 
+    
+    [-v <level>] [--verbosity <level>]
+    Verbosity level for app. Not used currently.
+    
+    [--version]
+    If specified, print version number and exit. 
+
+    [-y] [--synopsis]
+    Show short synopsis.
+
 
 
 Run
 ----
-
-This ``plugin`` can be run in two modes: natively as a python package or as a containerized docker image.
-
-Using PyPI
-~~~~~~~~~~
-
-To run from PyPI, simply do a 
-
-.. code:: bash
-
-    pip install mgz2imgslices
-
-and run with
-
-.. code:: bash
-
-    mgz2imgslices.py --man /tmp /tmp
-
-to get inline help. The app should also understand being called with only two positional arguments
-
-.. code:: bash
-
-    mgz2imgslices.py /some/input/directory /destination/directory
-
 
 Using ``docker run``
 ~~~~~~~~~~~~~~~~~~~~
