@@ -4,3 +4,4 @@ numpy
 nibabel
 imageio
 pfmisc
+pandas
