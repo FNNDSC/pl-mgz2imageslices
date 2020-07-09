@@ -3,3 +3,5 @@ pudb
 numpy
 nibabel
 imageio
+pfmisc
+pandas

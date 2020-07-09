@@ -105,7 +105,7 @@ where necessary.)
         If specified, print (this) man page and exit.
 
         [--meta]
-        If specified, print plugin meta data and exit.
+        If specified, print plugin meta nparr_data and exit.
         
         [--savejson <DIR>] 
         If specified, save json representation file to DIR and exit. 
@@ -190,7 +190,7 @@ class Mgz2imgslices(ChrisApp):
         # add an arg for creating an output img of the *whole* mgz vol... maybe "--wholeVolume" (bool)
 
 
-    def initialize(self):
+    def initialize(self, options):
 
         self.l_skip             = []
         self.__name__           = "mgz2imgslices"
@@ -208,16 +208,16 @@ class Mgz2imgslices(ChrisApp):
         print(Gstr_title)
         print('Version: %s' % self.get_version())
 
-        self.initialize()
+        self.initialize(options)
 
         if len(options.skipLabelList):
             self.l_skip         = options.skipLabelList.split(',')
 
         mgz_vol = nib.load("%s/%s" % (options.inputdir, options.inputFile))
 
-        convert_to_np = mgz_vol.get_fdata()
+        nparr_mgz_vol = mgz_vol.get_fnparr_data()
         
-        unique, counts = np.unique(convert_to_np, return_counts=True)
+        unique, counts = np.unique(nparr_mgz_vol, return_counts=True)
         labels = dict(zip(unique, counts))
 
         for item in labels:
@@ -228,22 +228,22 @@ class Mgz2imgslices(ChrisApp):
 
             #mask voxels other than the current label to 0 values
             if(options.normalize):
-                single_label_array = np.where(convert_to_np!=item, 0, 1)
+                nparr_single_label = np.where(nparr_mgz_vol!=item, 0, 1)
             else:
-                single_label_array = np.where(convert_to_np!=item, 0, item)
+                nparr_single_label = np.where(nparr_mgz_vol!=item, 0, item)
             
-            total_slices = single_label_array.shape[0]
+            i_total_slices = nparr_single_label.shape[0]
             # iterate through slices
-            for current_slice in range(0, total_slices):
-                data = single_label_array[:, :, current_slice]
+            for current_slice in range(0, i_total_slices):
+                nparr_data = nparr_single_label[:, :, current_slice]
                 
                 # prevents lossy conversion
-                data=data.astype(np.uint8)
+                nparr_data=nparr_data.astype(np.uint8)
 
-                image_name = "%s/%s/%s-%00d.%s" % (options.outputdir, str_dirname, 
+                str_image_name = "%s/%s/%s-%00d.%s" % (options.outputdir, str_dirname, 
                     options.outputFileStem, current_slice, options.outputFileType)
-                self.dp.qprint("Saving %s" % image_name, level = 2)
-                imageio.imwrite(image_name, data)
+                self.dp.qprint("Saving %s" % str_image_name, level = 2)
+                imageio.imwrite(str_image_name, nparr_data)
 
     def show_man_page(self):
         """
