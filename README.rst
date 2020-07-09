@@ -47,6 +47,10 @@ Description
 
 It bifurcates all the labels within a ``.mgz`` file and stores all the slices corresponding to each label within individual directories named after the label number. 
 
+**NOTE:** 
+
+Labels represent the different cortical segments of the brain. 
+Refer to the file: ``FreeSurferColorLUT.txt`` in this repository for names and IDs of all the labels that a ``.mgz`` can have.  
 
 Arguments
 ---------
@@ -54,7 +58,7 @@ Arguments
 .. code::
 
     [-i] [--inputFile] <inputFile>
-        Input file to convert. Should be a .mgz file
+    Input file to convert. Should be a .mgz file
 
     [-o] [--outputFileStem] <outputFileStem>
     The output file stem to store conversion. If this is specified
