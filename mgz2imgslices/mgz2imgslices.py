@@ -16,6 +16,10 @@ import numpy as np
 import nibabel as nib
 import imageio
 sys.path.append(os.path.dirname(__file__))
+import  pfmisc
+from    pfmisc._colors      import  Colors
+from    pfmisc.debug        import  debug
+
 
 # import the Chris app superclass
 from chrisapp.base import ChrisApp
@@ -180,6 +184,22 @@ class Mgz2imgslices(ChrisApp):
         self.add_argument('-y', '--synopsis', dest='synopsis', type=bool, action='store_true',
                           default=False, optional=True, help='short synopsis')
 
+        self.add_argument('-s', '--skipLabelValueList', dest='skipLabelValueList', type=str, 
+                          default='', optional=True, help='Comma separated list of labels to skip')
+
+        # add an arg for creating an output img of the *whole* mgz vol... maybe "--wholeVolume" (bool)
+
+
+    def initialize(self):
+
+        self.l_skip             = []
+        self.__name__           = "mgz2imgslices"
+        self.verbosity          = int(options.verbosity)
+        self.dp                 = pfmisc.debug(    
+                                            verbosity   = self.verbosity,
+                                            within      = self.__name__
+                                            )
+
 
     def run(self, options):
         """
@@ -187,6 +207,11 @@ class Mgz2imgslices(ChrisApp):
         """
         print(Gstr_title)
         print('Version: %s' % self.get_version())
+
+        self.initialize()
+
+        if len(options.skipLabelList):
+            self.l_skip         = options.skipLabelList.split(',')
 
         mgz_vol = nib.load("%s/%s" % (options.inputdir, options.inputFile))
 
@@ -196,8 +221,10 @@ class Mgz2imgslices(ChrisApp):
         labels = dict(zip(unique, counts))
 
         for item in labels:
+            if item in self.l_skip: continue
+            self.dp.qprint("Processing %s.." % item, level = 1)
             str_dirname = str(int(item))
-            os.mkdir("%s/%s" % (options.outputdir, str_dirname))
+            os.mkdir("%s/%00d" % (options.outputdir, item))
 
             #mask voxels other than the current label to 0 values
             if(options.normalize):
@@ -213,8 +240,9 @@ class Mgz2imgslices(ChrisApp):
                 # prevents lossy conversion
                 data=data.astype(np.uint8)
 
-                image_name = "%s/%s/%s-%d.%s" % (options.outputdir, str_dirname, 
+                image_name = "%s/%s/%s-%00d.%s" % (options.outputdir, str_dirname, 
                     options.outputFileStem, current_slice, options.outputFileType)
+                self.dp.qprint("Saving %s" % image_name, level = 2)
                 imageio.imwrite(image_name, data)
 
     def show_man_page(self):
