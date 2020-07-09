@@ -123,7 +123,9 @@ Examples
     mkdir in out && chmod 777 out
     docker run --rm -v $(pwd)/in:/incoming -v $(pwd)/out:/outgoing      \
             fnndsc/pl-mgz2imgslices mgz2imgslices.py                        \
-            --man                                                       \
+            -i <mgzFileToConvert>                                           \
+            -o <outputFileStem>                                             \
+            -t <outputFileType>                                             \
             /incoming /outgoing
 
 
