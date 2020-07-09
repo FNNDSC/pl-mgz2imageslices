@@ -184,6 +184,8 @@ class Mgz2imgslices(ChrisApp):
         self.add_argument('-s', '--skipLabelValueList', dest='skipLabelValueList', type=str, 
                           default='', optional=True, help='Comma separated list of labels to skip')
 
+        # add an arg for creating an output img of the *whole* mgz vol... maybe "--wholeVolume" (bool)
+
 
     def initialize(self):
 
