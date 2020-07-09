@@ -210,8 +210,8 @@ class Mgz2imgslices(ChrisApp):
 
         self.initialize(options)
 
-        if len(options.skipLabelList):
-            self.l_skip         = options.skipLabelList.split(',')
+        if len(options.skipLabelValueList):
+            self.l_skip         = options.skipLabelValueList.split(',')
 
         mgz_vol = nib.load("%s/%s" % (options.inputdir, options.inputFile))
 
