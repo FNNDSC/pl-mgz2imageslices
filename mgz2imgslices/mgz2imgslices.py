@@ -215,7 +215,7 @@ class Mgz2imgslices(ChrisApp):
 
         mgz_vol = nib.load("%s/%s" % (options.inputdir, options.inputFile))
 
-        nparr_mgz_vol = mgz_vol.get_fnparr_data()
+        nparr_mgz_vol = mgz_vol.get_fdata()
         
         unique, counts = np.unique(nparr_mgz_vol, return_counts=True)
         labels = dict(zip(unique, counts))
