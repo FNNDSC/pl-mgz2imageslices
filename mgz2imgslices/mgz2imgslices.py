@@ -15,6 +15,8 @@ import sys
 import numpy as np
 import nibabel as nib
 import imageio
+import pandas as pd
+import re
 sys.path.append(os.path.dirname(__file__))
 import  pfmisc
 from    pfmisc._colors      import  Colors
@@ -200,6 +202,20 @@ class Mgz2imgslices(ChrisApp):
                                             within      = self.__name__
                                             )
 
+    def readFSColorLUT(self, str_filename):
+        l_column_names = ["#No", "LabelName"]
+
+        df_FSColorLUT = pd.DataFrame(columns=l_column_names)
+
+        with open(str_filename) as f:
+            for line in f:
+                if line and line[0].isdigit():
+                    line = re.sub(' +', ' ', line)
+                    l_line = line.split(' ')
+                    l_labels = l_line[:2]
+                    df_FSColorLUT.loc[len(df_FSColorLUT)] = l_labels
+            
+        return df_FSColorLUT
 
     def run(self, options):
         """
@@ -221,10 +237,20 @@ class Mgz2imgslices(ChrisApp):
         labels = dict(zip(unique, counts))
 
         for item in labels:
-            if item in self.l_skip: continue
+            if int(item) in self.l_skip: 
+                print(item)
+                continue
             self.dp.qprint("Processing %s.." % item, level = 1)
-            str_dirname = str(int(item))
-            os.mkdir("%s/%00d" % (options.outputdir, item))
+            if options.lookuptable == "__val__":
+                str_dirname = str(int(item))
+            elif options.lookuptable == "__fs__":
+                df_FSColorLUT = self.readFSColorLUT("/usr/src/mgz2imgslices/FreeSurferColorLUT.txt")
+                str_dirname = df_FSColorLUT.loc[df_FSColorLUT['#No'] == str(int(item)), 'LabelName'].iloc[0]
+            else:
+                df_FSColorLUT = self.readFSColorLUT("%s/%s" % (options.inputdir, options.lookuptable))
+                str_dirname = df_FSColorLUT.loc[df_FSColorLUT['#No'] == str(int(item)), 'LabelName'].iloc[0]
+                
+            os.mkdir("%s/%s" % (options.outputdir, str_dirname))
 
             #mask voxels other than the current label to 0 values
             if(options.normalize):
