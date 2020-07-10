@@ -29,6 +29,8 @@ Synopsis
             [-o] [--outputFileStem] <outputFileStem>                    \
             [-t] [--outputFileType] <outputFileType>                    \
             [-n] [--normalize]                                          \
+            [-l] [--lookuptable] <LUTcolumnToNameDirectories>           \
+            [-s] [--skipLabelValueList] <ListOfLabelNumbersToSkip>      \
             [-h] [--help]                                               \
             [--json]                                                    \
             [--man]                                                     \
@@ -71,6 +73,17 @@ Arguments
 
     [-n] [--normalize]
     If specified, will normalize the output image pixels to 0 and 1 values.
+
+    [-l] [--lookuptable] <LUTcolumnToNameDirectories>
+    Specifies if the label directories that are created should be named 
+    according to Label Number or Label Name. 
+    Can be wither "__val__", "__fs__"(uses the built in FreeSurferColorLUT.txt) 
+    or <LUTFilename.txt> provided by user from the inputdir, 
+    Default is "__val__" which is Label Numbers
+
+    [-s] [--skipLabelValueList] <ListOfLabelNumbersToSkip>
+    If specified as a comma separated string of label numbers,
+    will not create directories of those label numbers.
 
     [-h] [--help]
     If specified, show help message and exit.

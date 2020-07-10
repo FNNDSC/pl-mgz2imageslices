@@ -103,7 +103,7 @@ where necessary.)
         Specifies if the label directories that are created should be named 
         according to Label Number or Label Name. 
         Can be wither "__val__", "__fs__"(uses the built in FreeSurferColorLUT.txt) 
-        or <LUTFilename.txt>
+        or <LUTFilename.txt> provided by user from the inputdir
         Default is "__val__" which is Label Numbers
 
         [-s] [--skipLabelValueList] <ListOfLabelNumbersToSkip>
