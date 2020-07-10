@@ -57,6 +57,8 @@ where necessary.)
             [-o] [--outputFileStem] <outputFileStem>                    \\
             [-t] [--outputFileType] <outputFileType>                    \\
             [-n] [--normalize]                                          \\
+            [-l] [--lookuptable] <LUTcolumnToNameDirectories>           \\
+            [-s] [--skipLabelValueList] <ListOfLabelNumbersToSkip>      \\         
             [-h] [--help]                                               \\
             [--json]                                                    \\
             [--man]                                                     \\
@@ -97,6 +99,17 @@ where necessary.)
         [-n] [--normalize]
         If specified, will normalize the output image pixels to 0 and 1 values.
 
+        [-l] [--lookuptable] <LUTcolumnToNameDirectories>
+        Specifies if the label directories that are created should be named 
+        according to Label Number or Label Name. 
+        Can be wither "__val__", "__fs__"(uses the built in FreeSurferColorLUT.txt) 
+        or <LUTFilename.txt>
+        Default is "__val__" which is Label Numbers
+
+        [-s] [--skipLabelValueList] <ListOfLabelNumbersToSkip>
+        If specified as a comma separated string of label numbers,
+        will not create directories of those label numbers.
+
         [-h] [--help]
         If specified, show help message and exit.
         
@@ -107,7 +120,7 @@ where necessary.)
         If specified, print (this) man page and exit.
 
         [--meta]
-        If specified, print plugin meta nparr_data and exit.
+        If specified, print plugin meta np_data and exit.
         
         [--savejson <DIR>] 
         If specified, save json representation file to DIR and exit. 
@@ -226,8 +239,31 @@ class Mgz2imgslices(ChrisApp):
         else:
             df_FSColorLUT = self.readFSColorLUT("%s/%s" % (options.inputdir, options.lookuptable))
             str_dirname = df_FSColorLUT.loc[df_FSColorLUT['#No'] == str(int(item)), 'LabelName'].iloc[0]
-            
+
         return str_dirname    
+
+    def nparray_to_imgs(self, options, np_mgz_vol, item):
+        #mask voxels other than the current label to 0 values
+            if(options.normalize):
+                np_single_label = np.where(np_mgz_vol!=item, 0, 1)
+            else:
+                np_single_label = np.where(np_mgz_vol!=item, 0, item)
+            
+            i_total_slices = np_single_label.shape[0]
+
+            str_dirname = self.lookup_table(options, item)
+
+            # iterate through slices
+            for current_slice in range(0, i_total_slices):
+                np_data = np_single_label[:, :, current_slice]
+                
+                # prevents lossy conversion
+                np_data=np_data.astype(np.uint8)
+
+                str_image_name = "%s/%s/%s-%00d.%s" % (options.outputdir, str_dirname, 
+                    options.outputFileStem, current_slice, options.outputFileType)
+                self.dp.qprint("Saving %s" % str_image_name, level = 2)
+                imageio.imwrite(str_image_name, np_data)
 
 
     def run(self, options):
@@ -244,9 +280,9 @@ class Mgz2imgslices(ChrisApp):
 
         mgz_vol = nib.load("%s/%s" % (options.inputdir, options.inputFile))
 
-        nparr_mgz_vol = mgz_vol.get_fdata()
+        np_mgz_vol = mgz_vol.get_fdata()
         
-        unique, counts = np.unique(nparr_mgz_vol, return_counts=True)
+        unique, counts = np.unique(np_mgz_vol, return_counts=True)
         labels = dict(zip(unique, counts))
 
         for item in labels:
@@ -259,25 +295,8 @@ class Mgz2imgslices(ChrisApp):
                
             os.mkdir("%s/%s" % (options.outputdir, str_dirname))
 
-            #mask voxels other than the current label to 0 values
-            if(options.normalize):
-                nparr_single_label = np.where(nparr_mgz_vol!=item, 0, 1)
-            else:
-                nparr_single_label = np.where(nparr_mgz_vol!=item, 0, item)
+            self.nparray_to_imgs(options, np_mgz_vol, item)
             
-            i_total_slices = nparr_single_label.shape[0]
-            # iterate through slices
-            for current_slice in range(0, i_total_slices):
-                nparr_data = nparr_single_label[:, :, current_slice]
-                
-                # prevents lossy conversion
-                nparr_data=nparr_data.astype(np.uint8)
-
-                str_image_name = "%s/%s/%s-%00d.%s" % (options.outputdir, str_dirname, 
-                    options.outputFileStem, current_slice, options.outputFileType)
-                self.dp.qprint("Saving %s" % str_image_name, level = 2)
-                imageio.imwrite(str_image_name, nparr_data)
-
     def show_man_page(self):
         """
         Print the app's man page.
