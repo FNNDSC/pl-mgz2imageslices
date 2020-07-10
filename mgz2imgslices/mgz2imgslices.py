@@ -217,6 +217,19 @@ class Mgz2imgslices(ChrisApp):
             
         return df_FSColorLUT
 
+    def lookup_table(self, options, item):
+        if options.lookuptable == "__val__":
+            str_dirname = str(int(item))
+        elif options.lookuptable == "__fs__":
+            df_FSColorLUT = self.readFSColorLUT("/usr/src/mgz2imgslices/FreeSurferColorLUT.txt")
+            str_dirname = df_FSColorLUT.loc[df_FSColorLUT['#No'] == str(int(item)), 'LabelName'].iloc[0]
+        else:
+            df_FSColorLUT = self.readFSColorLUT("%s/%s" % (options.inputdir, options.lookuptable))
+            str_dirname = df_FSColorLUT.loc[df_FSColorLUT['#No'] == str(int(item)), 'LabelName'].iloc[0]
+            
+        return str_dirname    
+
+
     def run(self, options):
         """
         Define the code to be run by this plugin app.
@@ -241,15 +254,9 @@ class Mgz2imgslices(ChrisApp):
                 print(item)
                 continue
             self.dp.qprint("Processing %s.." % item, level = 1)
-            if options.lookuptable == "__val__":
-                str_dirname = str(int(item))
-            elif options.lookuptable == "__fs__":
-                df_FSColorLUT = self.readFSColorLUT("/usr/src/mgz2imgslices/FreeSurferColorLUT.txt")
-                str_dirname = df_FSColorLUT.loc[df_FSColorLUT['#No'] == str(int(item)), 'LabelName'].iloc[0]
-            else:
-                df_FSColorLUT = self.readFSColorLUT("%s/%s" % (options.inputdir, options.lookuptable))
-                str_dirname = df_FSColorLUT.loc[df_FSColorLUT['#No'] == str(int(item)), 'LabelName'].iloc[0]
-                
+
+            str_dirname = self.lookup_table(options, item)
+               
             os.mkdir("%s/%s" % (options.outputdir, str_dirname))
 
             #mask voxels other than the current label to 0 values
