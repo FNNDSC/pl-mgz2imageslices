@@ -58,7 +58,8 @@ where necessary.)
             [-t] [--outputFileType] <outputFileType>                    \\
             [-n] [--normalize]                                          \\
             [-l] [--lookuptable] <LUTcolumnToNameDirectories>           \\
-            [-s] [--skipLabelValueList] <ListOfLabelNumbersToSkip>      \\         
+            [-s] [--skipLabelValueList] <ListOfLabelNumbersToSkip>      \\ 
+            [-w] [--wholeVolume]                                        \\        
             [-h] [--help]                                               \\
             [--json]                                                    \\
             [--man]                                                     \\
@@ -109,6 +110,10 @@ where necessary.)
         [-s] [--skipLabelValueList] <ListOfLabelNumbersToSkip>
         If specified as a comma separated string of label numbers,
         will not create directories of those label numbers.
+
+        [-w] [--wholeVolume]
+        If specified, creates a diretory called "WholeVolume" (within the outputdir) 
+        containing PNG/JPG files including all labels.
 
         [-h] [--help]
         If specified, show help message and exit.
@@ -311,6 +316,7 @@ class Mgz2imgslices(ChrisApp):
         for item in labels:
             if str(int(item)) in self.l_skip: 
                 continue
+
             self.dp.qprint("Processing %s.." % item, level = 1)
 
             str_dirname = self.lookup_table(options, item)
