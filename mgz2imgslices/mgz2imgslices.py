@@ -202,8 +202,9 @@ class Mgz2imgslices(ChrisApp):
         self.add_argument('-s', '--skipLabelValueList', dest='skipLabelValueList', type=str, 
                           default='', optional=True, help='Comma separated list of labels to skip')
 
-        # add an arg for creating an output img of the *whole* mgz vol... maybe "--wholeVolume" (bool)
-
+        self.add_argument('-w', '--wholeVolume', dest='wholeVolume', type=bool, 
+                          default=False, optional=True, 
+                          help='Converts entire mgz volume to png/jpg instead of individually masked labels')
 
     def initialize(self, options):
 
@@ -265,6 +266,26 @@ class Mgz2imgslices(ChrisApp):
                 self.dp.qprint("Saving %s" % str_image_name, level = 2)
                 imageio.imwrite(str_image_name, np_data)
 
+    def convert_whole_volume(self, options, np_mgz_vol):
+        if(options.wholeVolume):
+            i_total_slices = np_mgz_vol.shape[0]
+
+            str_whole_dirname = "WholeVolume"
+
+            os.mkdir("%s/%s" % (options.outputdir, str_whole_dirname))
+
+            # iterate through slices
+            for current_slice in range(0, i_total_slices):
+                np_data = np_mgz_vol[:, :, current_slice]
+                
+                # prevents lossy conversion
+                np_data=np_data.astype(np.uint8)
+
+                str_image_name = "%s/%s/%s-%00d.%s" % (options.outputdir, str_whole_dirname, 
+                    options.outputFileStem, current_slice, options.outputFileType)
+                self.dp.qprint("Saving %s" % str_image_name, level = 2)
+                imageio.imwrite(str_image_name, np_data)
+
 
     def run(self, options):
         """
@@ -284,6 +305,8 @@ class Mgz2imgslices(ChrisApp):
         
         unique, counts = np.unique(np_mgz_vol, return_counts=True)
         labels = dict(zip(unique, counts))
+
+        self.convert_whole_volume(options, np_mgz_vol)
 
         for item in labels:
             if str(int(item)) in self.l_skip: 
