@@ -286,8 +286,7 @@ class Mgz2imgslices(ChrisApp):
         labels = dict(zip(unique, counts))
 
         for item in labels:
-            if int(item) in self.l_skip: 
-                print(item)
+            if str(int(item)) in self.l_skip: 
                 continue
             self.dp.qprint("Processing %s.." % item, level = 1)
 
