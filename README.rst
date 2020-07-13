@@ -114,20 +114,51 @@ Arguments
 Run
 ----
 
-Using Docker you can run this application using the following instructions
+While ``pl-mgz2imgslices`` is meant to be run as a containerized docker image, typcially within ChRIS, it is quite possible to run the dockerized plugin directly from the command line as well. The following instructions are meant to be a psuedo- ``jupyter-notebook`` inspired style where if you follow along and copy/paste into a terminal you should be able to run all the examples.
+
+First, let's create a directory, say ``devel`` wherever you feel like it. We will place some test data in this directory to process with this plugin.
+
+.. code:: bash
+
+    cd ~/
+    mkdir devel
+    cd devel
+    export DEVEL=$(pwd)
+
+Now, we need to fetch sample MGZ data. 
+
+Pull MGZ data
+~~~~~~~~~~~~~
+
+- We provide a sample directory of a few ``.mgz`` volumes here. (https://github.com/FNNDSC/mgz_converter_dataset.git)
+
+- Clone this repository (``mgz_converter_dataset``) to your local computer.
+
+.. code:: bash
+
+    git clone https://github.com/FNNDSC/mgz_converter_dataset.git
+
+Make sure the ``mgz_converter_dataset`` directory is placed in the devel directory.
+
 
 Using ``docker run``
 ~~~~~~~~~~~~~~~~~~~~
 
 To run using ``docker``, be sure to assign an "input" directory to ``/incoming`` and an output directory to ``/outgoing``. *Make sure that the* ``$(pwd)/out`` *directory is world writable!*
 
-Now pull the docker image for ``pl-mgz2imgslices`` using the following command:
+- Make sure your current working directory is ``devel``. At this juncture it should contain `mgz_converter_dataset``.
+
+- Create an output directory named ``results`` in ``devel``.
+
+.. code:: bash
+
+    mkdir results && chmod 777 results
+
+- Pull the ``fnndsc/pl-mgz2imgslices`` image using the following command.
 
 .. code:: bash
 
     docker pull fnndsc/pl-mgz2imgslices
-
-*work in progress*
 
 Examples
 --------
