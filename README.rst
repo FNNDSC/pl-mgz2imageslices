@@ -170,7 +170,7 @@ Copy and modify the different commands below as needed:
     mkdir in out && chmod 777 out
     docker run --rm                                     \
         -v ${DEVEL}/mgz_converter_dataset/100307/:/incoming \
-        -v $(pwd)/out:/outgoing                             \
+        -v ${DEVEL}/results/:/outgoing                             \
         fnndsc/pl-mgz2imgslices mgz2imgslices.py            \
         -i aparc.a2009s+aseg.mgz                            \
         -o sample                                           \
@@ -181,7 +181,7 @@ Copy and modify the different commands below as needed:
         --wholeVolume                                       \
         /incoming /outgoing
 
-        
+
 
 
 
