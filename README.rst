@@ -77,7 +77,7 @@ Arguments
     [-l] [--lookuptable] <LUTcolumnToNameDirectories>
     Specifies if the label directories that are created should be named 
     according to Label Number or Label Name. 
-    Can be wither "__val__", "__fs__"(uses the built in FreeSurferColorLUT.txt) 
+    Can be either "__val__", "__fs__"(uses the built in FreeSurferColorLUT.txt) 
     or <LUTFilename.txt> provided by user from the inputdir, 
     Default is "__val__" which is Label Numbers
 
@@ -178,7 +178,8 @@ Copy and modify the different commands below as needed:
         --lookuptable __fs__                                \
         --skipLabelValueList 0,2,5,7                        \
         --normalize                                         \
-        --wholeVolume                                       \
+        --wholeVolume                                       \ 
+        --verbosity 1                                       \
         /incoming /outgoing
 
 
