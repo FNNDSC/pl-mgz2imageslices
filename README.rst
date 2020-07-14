@@ -31,6 +31,7 @@ Synopsis
             [-n] [--normalize]                                          \
             [-l] [--lookuptable] <LUTcolumnToNameDirectories>           \
             [-s] [--skipLabelValueList] <ListOfLabelNumbersToSkip>      \
+            [-w] [--wholeVolume] <NameOfDirectoryWithAllVolumeLabels>   \
             [-h] [--help]                                               \
             [--json]                                                    \
             [--man]                                                     \
@@ -84,6 +85,10 @@ Arguments
     [-s] [--skipLabelValueList] <ListOfLabelNumbersToSkip>
     If specified as a comma separated string of label numbers,
     will not create directories of those label numbers.
+
+    [-w] [--wholeVolume] <NameOfDirectoryWithAllVolumeLabels>
+    If specified, creates a diretory called "WholeVolume" (within the outputdir) 
+    containing PNG/JPG files including all labels.
 
     [-h] [--help]
     If specified, show help message and exit.
