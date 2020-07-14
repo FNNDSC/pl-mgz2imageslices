@@ -163,17 +163,25 @@ To run using ``docker``, be sure to assign an "input" directory to ``/incoming``
 Examples
 --------
 
-*work in progress*
+Copy and modify the different commands below as needed:
 
 .. code:: bash
 
     mkdir in out && chmod 777 out
-    docker run --rm -v $(pwd)/in:/incoming -v $(pwd)/out:/outgoing      \
-            fnndsc/pl-mgz2imgslices mgz2imgslices.py                        \
-            -i <mgzFileToConvert>                                           \
-            -o <outputFileStem>                                             \
-            -t <outputFileType>                                             \
-            /incoming /outgoing
+    docker run --rm                                     \
+        -v ${DEVEL}/mgz_converter_dataset/100307/:/incoming \
+        -v $(pwd)/out:/outgoing                             \
+        fnndsc/pl-mgz2imgslices mgz2imgslices.py            \
+        -i aparc.a2009s+aseg.mgz                            \
+        -o sample                                           \
+        -t jpg                                              \
+        --lookuptable __fs__                                \
+        --skipLabelValueList 0,2,5,7                        \
+        --normalize                                         \
+        --wholeVolume                                       \
+        /incoming /outgoing
+
+        
 
 
 
