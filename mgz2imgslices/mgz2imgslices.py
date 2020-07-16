@@ -322,7 +322,7 @@ class Mgz2imgslices(ChrisApp):
 
             str_dirname = self.lookup_table(options, item)
 
-            self.dp.qprint("Processing %s.." % str_dirname, level = 1)
+            self.dp.qprint("Processing %s-%s.." % (options.label, str_dirname), level = 1)
                
             os.mkdir("%s/%s-%s" % (options.outputdir, options.label, str_dirname))
 
