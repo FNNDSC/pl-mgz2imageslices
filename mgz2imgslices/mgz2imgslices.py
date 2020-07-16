@@ -195,6 +195,9 @@ class Mgz2imgslices(ChrisApp):
         self.add_argument('-t', '--outputFileType', dest='outputFileType', type=str,
                           default='png', optional=True, help='output image file format')
 
+        self.add_argument('--label', dest='label', type=str,
+                          default='label', optional=True, help='prefix a label to all the label directories')
+
         self.add_argument('-n', '--normalize', dest='normalize', type=bool, 
                             default=False, optional=True, help='normalize the pixels of output image files')
 
@@ -266,7 +269,7 @@ class Mgz2imgslices(ChrisApp):
                 # prevents lossy conversion
                 np_data=np_data.astype(np.uint8)
 
-                str_image_name = "%s/%s/%s-%00d.%s" % (options.outputdir, str_dirname, 
+                str_image_name = "%s/%s-%s/%s-%00d.%s" % (options.outputdir, options.label, str_dirname, 
                     options.outputFileStem, current_slice, options.outputFileType)
                 self.dp.qprint("Saving %s" % str_image_name, level = 2)
                 imageio.imwrite(str_image_name, np_data)
@@ -285,7 +288,7 @@ class Mgz2imgslices(ChrisApp):
             # prevents lossy conversion
             np_data=np_data.astype(np.uint8)
 
-            str_image_name = "%s/%s/%s-%00d.%s" % (options.outputdir, str_whole_dirname, 
+            str_image_name = "%s/%s-%s/%s-%00d.%s" % (options.outputdir, options.label, str_whole_dirname, 
                 options.outputFileStem, current_slice, options.outputFileType)
             self.dp.qprint("Saving %s" % str_image_name, level = 2)
             imageio.imwrite(str_image_name, np_data)
@@ -321,7 +324,7 @@ class Mgz2imgslices(ChrisApp):
 
             self.dp.qprint("Processing %s.." % str_dirname, level = 1)
                
-            os.mkdir("%s/%s" % (options.outputdir, str_dirname))
+            os.mkdir("%s/%s-%s" % (options.outputdir, options.label, str_dirname))
 
             self.nparray_to_imgs(options, np_mgz_vol, item)
             
