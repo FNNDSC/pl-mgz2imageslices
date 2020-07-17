@@ -56,6 +56,7 @@ where necessary.)
             [-i] [--inputFile] <inputFile>                              \\
             [-o] [--outputFileStem] <outputFileStem>                    \\
             [-t] [--outputFileType] <outputFileType>                    \\
+            [--label] <prefixForLabelDirectories>                       \\
             [-n] [--normalize]                                          \\
             [-l] [--lookuptable] <LUTcolumnToNameDirectories>           \\
             [-s] [--skipLabelValueList] <ListOfLabelNumbersToSkip>      \\ 
@@ -96,6 +97,9 @@ where necessary.)
         [-t] [--outputFileType] <outputFileType>
         The output file type. If different to <outputFileStem> extension,
         will override extension in favour of <outputFileType>. Should be a 'png' or 'jpg'
+
+        [--label] <prefixForLabelDirectories>
+        Adds a prefix to each Label directory name
 
         [-n] [--normalize]
         If specified, will normalize the output image pixels to 0 and 1 values.
