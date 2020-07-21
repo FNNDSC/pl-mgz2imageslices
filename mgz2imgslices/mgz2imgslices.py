@@ -17,6 +17,7 @@ import nibabel as nib
 import imageio
 import pandas as pd
 import re
+from mgz2imgslices import mgz2imgslices
 sys.path.append(os.path.dirname(__file__))
 import  pfmisc
 from    pfmisc._colors      import  Colors
