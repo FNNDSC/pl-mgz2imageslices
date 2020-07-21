@@ -5,3 +5,4 @@ nibabel
 imageio
 pfmisc
 pandas
+mgz2imgslices
