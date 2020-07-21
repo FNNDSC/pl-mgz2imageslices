@@ -98,7 +98,7 @@ class Mgz2imgslices(ChrisApp):
                           default='', optional=True, help='Comma separated list of labels to skip')
 
         self.add_argument('-f', '--filterLabelValueList', dest='filterLabelValueList', type=str, 
-                          default='', optional=True, help='Comma separated list of voxel values to include')
+                          default='-1', optional=True, help='Comma separated list of voxel values to include')
 
         self.add_argument('-w', '--wholeVolume', dest='wholeVolume', type=str, 
                           default="wholeVolume", optional=True, 
@@ -295,5 +295,5 @@ class Mgz2imgslices(ChrisApp):
 
 # ENTRYPOINT
 if __name__ == "__main__":
-    chris_app = Mgz2imgslices()
-    chris_app.launch()
+    app = Mgz2imgslices()
+    app.launch()
