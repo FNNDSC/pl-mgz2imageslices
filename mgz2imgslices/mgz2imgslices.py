@@ -1,6 +1,5 @@
-#!/usr/bin/env python                                            
 #
-# mgz2imgslices ds ChRIS plugin app
+# S3 push DS app
 #
 # (c) 2016-2019 Fetal-Neonatal Neuroimaging & Developmental Science Center
 #                   Boston Children's Hospital
@@ -12,12 +11,14 @@
 
 import os
 import sys
+import traceback
+from pydoc import synopsis
+
 import numpy as np
 import nibabel as nib
 import imageio
 import pandas as pd
 import re
-from mgz2imgslices import mgz2imgslices
 sys.path.append(os.path.dirname(__file__))
 import  pfmisc
 from    pfmisc._colors      import  Colors
@@ -26,126 +27,7 @@ from    pfmisc.debug        import  debug
 
 # import the Chris app superclass
 from chrisapp.base import ChrisApp
-
-
-Gstr_title = """
-                      _____ _                     _ _               
-                     / __  (_)                   | (_)              
- _ __ ___   __ _ ____`' / /'_ _ __ ___   __ _ ___| |_  ___ ___  ___ 
-| '_ ` _ \ / _` |_  /  / / | | '_ ` _ \ / _` / __| | |/ __/ _ \/ __|
-| | | | | | (_| |/ / ./ /__| | | | | | | (_| \__ \ | | (_|  __/\__ \\
-|_| |_| |_|\__, /___|\_____/_|_| |_| |_|\__, |___/_|_|\___\___||___/
-            __/ |                        __/ |                      
-           |___/                        |___/                       
-"""
-
-Gstr_synopsis = """
-
-(Edit this in-line help for app specifics. At a minimum, the 
-flags below are supported -- in the case of DS apps, both
-positional arguments <inputDir> and <outputDir>; for FS apps
-only <outputDir> -- and similarly for <in> <out> directories
-where necessary.)
-
-    NAME
-
-       mgz2imgslices.py 
-
-    SYNOPSIS
-
-        python mgz2imgslices.py                                         \\
-            [-i] [--inputFile] <inputFile>                              \\
-            [-o] [--outputFileStem] <outputFileStem>                    \\
-            [-t] [--outputFileType] <outputFileType>                    \\
-            [--label] <prefixForLabelDirectories>                       \\
-            [-n] [--normalize]                                          \\
-            [-l] [--lookuptable] <LUTcolumnToNameDirectories>           \\
-            [-s] [--skipLabelValueList] <ListOfLabelNumbersToSkip>      \\ 
-            [-w] [--wholeVolume]                                        \\        
-            [-h] [--help]                                               \\
-            [--json]                                                    \\
-            [--man]                                                     \\
-            [--meta]                                                    \\
-            [--savejson <DIR>]                                          \\
-            [-v <level>] [--verbosity <level>]                          \\
-            [--version]                                                 \\
-            [-y] [--synopsis]                                           \\
-            <inputDir>                                                  \\
-            <outputDir> 
-
-    BRIEF EXAMPLE
-
-        * Bare bones execution
-
-            mkdir in out && chmod 777 out
-            python mgz2imgslices.py   \\
-                                in    out
-
-    DESCRIPTION
-
-        `mgz2imgslices.py` ...
-
-    ARGS
-
-        [-i] [--inputFile] <inputFile>
-        Input file to convert. Should be a .mgz file
-
-        [-o] [--outputFileStem] <outputFileStem>
-        The output file stem to store conversion. If this is specified
-        with an extension, this extension will be used to specify the
-        output file type.
-
-        [-t] [--outputFileType] <outputFileType>
-        The output file type. If different to <outputFileStem> extension,
-        will override extension in favour of <outputFileType>. Should be a 'png' or 'jpg'
-
-        [--label] <prefixForLabelDirectories>
-        Adds a prefix to each Label directory name
-
-        [-n] [--normalize]
-        If specified, will normalize the output image pixels to 0 and 1 values.
-
-        [-l] [--lookuptable] <LUTcolumnToNameDirectories>
-        Specifies if the label directories that are created should be named 
-        according to Label Number or Label Name. 
-        Can be wither "__val__", "__fs__"(uses the built in FreeSurferColorLUT.txt) 
-        or <LUTFilename.txt> provided by user from the inputdir
-        Default is "__val__" which is Label Numbers
-
-        [-s] [--skipLabelValueList] <ListOfLabelNumbersToSkip>
-        If specified as a comma separated string of label numbers,
-        will not create directories of those label numbers.
-
-        [-w] [--wholeVolume]
-        If specified, creates a diretory called "WholeVolume" (within the outputdir) 
-        containing PNG/JPG files including all labels.
-
-        [-h] [--help]
-        If specified, show help message and exit.
-        
-        [--json]
-        If specified, show json representation of app and exit.
-        
-        [--man]
-        If specified, print (this) man page and exit.
-
-        [--meta]
-        If specified, print plugin meta np_data and exit.
-        
-        [--savejson <DIR>] 
-        If specified, save json representation file to DIR and exit. 
-        
-        [-v <level>] [--verbosity <level>]
-        Verbosity level for app. Not used currently.
-        
-        [--version]
-        If specified, print version number and exit. 
-
-        [-y] [--synopsis]
-        Show short synopsis.
-
-"""
-
+from mgz2imgslices import mgz2imgslices
 
 class Mgz2imgslices(ChrisApp):
     """
@@ -215,129 +97,200 @@ class Mgz2imgslices(ChrisApp):
         self.add_argument('-s', '--skipLabelValueList', dest='skipLabelValueList', type=str, 
                           default='', optional=True, help='Comma separated list of labels to skip')
 
+        self.add_argument('-f', '--filterLabelValueList', dest='filterLabelValueList', type=str, 
+                          default='', optional=True, help='Comma separated list of voxel values to include')
+
         self.add_argument('-w', '--wholeVolume', dest='wholeVolume', type=str, 
                           default="wholeVolume", optional=True, 
                           help='Converts entire mgz volume to png/jpg instead of individually masked labels')
+                        
+        self.add_argument('--printElapsedTime', dest='printElapsedTime', type=bool, action='store_true',
+                          default=False, optional=True, help='print program run time')
 
-    def initialize(self, options):
+    def show_man_page(self, ab_shortOnly=False):
+        scriptName = os.path.basename(sys.argv[0])
+        shortSynopsis = '''
+        NAME
+    	    pl-mgz2imgslices - convert mgz volumes to jpg/png/etc.
+        SYNOPSIS
+                %s                                       \\
+            -i|--inputFile <inputFile>                                  \\
+            -d|--outputDir <outputDir>                                  \\
+            [-I|--inputDir <inputDir>]                                  \\
+            [-o|--outputFileStem]<outputFileStem>]                      \\
+            [-t|--outputFileType <outputFileType>]                      \\
+            [--label <prefixForLabelDirectories>]                       \\
+            [-n|--normalize]                                            \\
+            [-l|--lookuptable <LUTfile>]                                \\
+            [-s|--skipLabelValueList <ListOfVoxelValuesToSkip>]         \\
+            [-f|--filterLabelValueList <ListOfVoxelValuesToInclude>]       \\
+            [-w|--wholeVolume <wholeVolDirName>]                        \\
+            [-h|--help]                                                 \\
+            [--json]                                                    \\
+            [--man]                                                     \\
+            [--meta]                                                    \\
+            [--savejson <DIR>]                                          \\
+            [-v|--verbosity <level>]                                    \\
+            [--version]                                                 \\
+            [-y|--synopsis]
 
-        self.l_skip             = []
-        self.__name__           = "mgz2imgslices"
-        self.verbosity          = int(options.verbosity)
-        self.dp                 = pfmisc.debug(    
-                                            verbosity   = self.verbosity,
-                                            within      = self.__name__
-                                            )
+        
+        ''' % scriptName
 
-    def readFSColorLUT(self, str_filename):
-        l_column_names = ["#No", "LabelName"]
+        description = '''
+        DESCRIPTION
 
-        df_FSColorLUT = pd.DataFrame(columns=l_column_names)
+        ``mgz2imgslices`` is a simple Python utility that filters "labels"
+        from ``mgz`` volume files and saves each label set as slices of
+        (by default) ``png`` files, organized into a series of directories,
+        one per label set.
 
-        with open(str_filename) as f:
-            for line in f:
-                if line and line[0].isdigit():
-                    line = re.sub(' +', ' ', line)
-                    l_line = line.split(' ')
-                    l_labels = l_line[:2]
-                    df_FSColorLUT.loc[len(df_FSColorLUT)] = l_labels
+        An ``mgz`` format file simply contains a 3D volume data structure of
+        image values. Often these values are interpreted to be image
+        intensities. Sometimes, however, they can be interpreted as label
+        identifiers. Regardless of the interpretation, the volume image data
+        is simply a number value in each voxel of the volume.
+
+        This script will scan across the input ``mgz`` volume, and for each
+        voxel value create a new output directory. In that directory will be
+        a set of (typically) ``png`` images, one per slice of the original
+        volume. These images will only contain the voxels in the original
+        dataset that all had that particular voxel value.
+
+        In this manner, ``mgz2imgslices`` can also be thought of as a dynamic
+        filter of an ``mgz`` volume file that filters each voxel value into
+        its own output directory of ``png`` image files.
+
+        ARGS
+
+            [-i|--inputFile  <inputFile>]
+            Input file to convert. Should be an ``mgz`` file.
+
+            [-o|--outputFileStem <outputFileStem>]
+            The output file stem to store image conversion. If this is specified
+            with an extension, this extension will be used to specify the
+            output file type.
+
+            [-t|--outputFileType <outputFileType>]
+            The output file type. If different to <outputFileStem> extension,
+            will override extension in favour of <outputFileType>.
+
+            Should be a ``png`` or ``jpg``.
+
+            [--label <prefixForLabelDirectories>]
+            Prefixes the string <prefixForLabelDirectories> to each filtered 
+            directory name. This is mostly for possible downstream processing, 
+            allowing a subsequent operation to easily determine which of the output
+            directories correspond to labels.
+
+            [-n|--normalize]
+            If specified, will normalize the output image pixel values to
+            0 and 1, otherwise pixel image values will retain the value in
+            the original input volume.
+
+            [-l|--lookuptable <LUTfile>]
+            If passed, perform a lookup on the filtered voxel label values
+            according to the contents of the <LUTfile>. This <LUTfile> should
+            conform to the FreeSurfer lookup table format (documented elsewhere).
+
+            Note that the special <LUTfile> string ``__val__`` can be passed which
+            effectively means "no <LUTfile>". In this case, the numerical voxel
+            values are used for output directory names. This special string is
+            really only useful for scripted cases of running this application when
+            modifying the CLI is more complex than simply setting the <LUTfile> to
+            ``__val__``.
+
+            [-s|--skipLabelValueList <ListOfLabelNumbersToSkip>]
+            If specified as a comma separated string of label numbers,
+            will not create directories of those label numbers.
+
+            [-f|--filterLabelValueList <ListOfVoxelValuesToInclude>]
+            The logical inverse of the [skipLabelValueList] flag. If specified,
+            only filter the comma separated list of passed voxel values from the
+            input volume.
+
+            The default value of "-1" implies all voxel values should be filtered.
+
+            [-w|--wholeVolume <wholeVolDirName>]
+            If specified, creates a diretory called <wholeVolDirName> (within the
+            outputdir) containing PNG/JPG images files of the entire input.
+
+            This effectively really creates a PNG/JPG conversion of the input
+            mgz file.
+
+            Values in the image files will be the same as the original voxel
+            values in the ``mgz``, unless the [--normalize] flag is specified
+            in which case this creates a single-value mask of the input image.
+
+            [-h|--help]
+            If specified, show help message and exit.
+
+            [--json]
+            If specified, show json representation of app and exit.
+
+            [--man]
+            If specified, print (this) man page and exit.
+
+            [--meta]
+            If specified, print plugin meta np_data and exit.
+
+            [--savejson <DIR>]
+            If specified, save json representation file to DIR and exit.
+
+            [-v <level>|--verbosity <level>]
+            Verbosity level for app. Not used currently.
+
+            [--version]
+            If specified, print version number and exit.
+
+            [-y|--synopsis]
+            Show short synopsis.
+
+        GITHUB
+
+            o See https://github.com/FNNDSC/mgz2imgslices for more help and source.
             
-        return df_FSColorLUT
-
-    def lookup_table(self, options, item):
-        if options.lookuptable == "__val__":
-            str_dirname = "00"+str(int(item))
-        elif options.lookuptable == "__fs__":
-            df_FSColorLUT = self.readFSColorLUT("/usr/src/mgz2imgslices/FreeSurferColorLUT.txt")
-            str_dirname = df_FSColorLUT.loc[df_FSColorLUT['#No'] == str(int(item)), 'LabelName'].iloc[0]
-        else:
-            df_FSColorLUT = self.readFSColorLUT("%s/%s" % (options.inputdir, options.lookuptable))
-            str_dirname = df_FSColorLUT.loc[df_FSColorLUT['#No'] == str(int(item)), 'LabelName'].iloc[0]
-
-        return str_dirname    
-
-    def nparray_to_imgs(self, options, np_mgz_vol, item):
-        #mask voxels other than the current label to 0 values
-            if(options.normalize):
-                np_single_label = np.where(np_mgz_vol!=item, 0, 1)
-            else:
-                np_single_label = np.where(np_mgz_vol!=item, 0, item)
-            
-            i_total_slices = np_single_label.shape[0]
-
-            str_dirname = self.lookup_table(options, item)
-
-            # iterate through slices
-            for current_slice in range(0, i_total_slices):
-                np_data = np_single_label[:, :, current_slice]
+                ''' % (scriptName)
                 
-                # prevents lossy conversion
-                np_data=np_data.astype(np.uint8)
-
-                str_image_name = "%s/%s-%s/%s-%00d.%s" % (options.outputdir, options.label, str_dirname, 
-                    options.outputFileStem, current_slice, options.outputFileType)
-                self.dp.qprint("Saving %s" % str_image_name, level = 2)
-                imageio.imwrite(str_image_name, np_data)
-
-    def convert_whole_volume(self, options, np_mgz_vol):
-        i_total_slices = np_mgz_vol.shape[0]
-
-        str_whole_dirname = options.label+"-"+options.wholeVolume
-
-        os.mkdir("%s/%s" % (options.outputdir, str_whole_dirname))
-
-        # iterate through slices
-        for current_slice in range(0, i_total_slices):
-            np_data = np_mgz_vol[:, :, current_slice]
-            
-            # prevents lossy conversion
-            np_data=np_data.astype(np.uint8)
-
-            str_image_name = "%s/%s/%s-%00d.%s" % (options.outputdir, str_whole_dirname, 
-                options.outputFileStem, current_slice, options.outputFileType)
-            self.dp.qprint("Saving %s" % str_image_name, level = 2)
-            imageio.imwrite(str_image_name, np_data)
-
+        if ab_shortOnly:
+            return shortSynopsis
+        else:
+            return shortSynopsis + description
 
     def run(self, options):
         """
         Define the code to be run by this plugin app.
         """
-        print(Gstr_title)
-        print('Version: %s' % self.get_version())
-
-        self.initialize(options)
-
-        if len(options.skipLabelValueList):
-            self.l_skip         = options.skipLabelValueList.split(',')
-
-        mgz_vol = nib.load("%s/%s" % (options.inputdir, options.inputFile))
-
-        np_mgz_vol = mgz_vol.get_fdata()
-        
-        unique, counts = np.unique(np_mgz_vol, return_counts=True)
-        labels = dict(zip(unique, counts))
-
-        if len(options.wholeVolume):
-            self.convert_whole_volume(options, np_mgz_vol)
-
-        for item in labels:
-            if str(int(item)) in self.l_skip: 
-                continue
-
-            str_dirname = self.lookup_table(options, item)
-
-            self.dp.qprint("Processing %s-%s.." % (options.label, str_dirname), level = 1)
-               
-            os.mkdir("%s/%s-%s" % (options.outputdir, options.label, str_dirname))
-
-            self.nparray_to_imgs(options, np_mgz_vol, item)
+        try:
+            options.inputDir = options.inputdir
+            options.outputDir = options.outputdir
             
-    def show_man_page(self):
-        """
-        Print the app's man page.
-        """
-        print(Gstr_synopsis)
+            imgConverter = mgz2imgslices.object_factoryCreate(options).C_convert
+
+            if options.version:
+                print("Version: %s" % options.version)
+                sys.exit(1)
+
+            if options.man or options.synopsis:
+                if options.man:
+                    str_help = self.show_man_page(False)
+                else:
+                    str_help = self.show_man_page(True)
+                print(str_help)
+                sys.exit(1)
+
+            imgConverter.tic()
+            imgConverter.run()
+
+            # if b_dicomExt:
+            #     break
+
+            if options.printElapsedTime:
+                print("Elapsed time = %f seconds" % imgConverter.toc())
+                sys.exit(0)
+
+        except Exception as e:
+            traceback.print_exc()
 
 
 # ENTRYPOINT
