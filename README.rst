@@ -62,60 +62,87 @@ Arguments
 
 .. code::
 
-    [-i] [--inputFile] <inputFile>
-    Input file to convert. Should be a .mgz file
+    [-i|--inputFile  <inputFile>]
+    Input file to convert. Should be an ``mgz`` file.
 
-    [-o] [--outputFileStem] <outputFileStem>
-    The output file stem to store conversion. If this is specified
+    [-o|--outputFileStem <outputFileStem>]
+    The output file stem to store image conversion. If this is specified
     with an extension, this extension will be used to specify the
     output file type.
 
-    [-t] [--outputFileType] <outputFileType>
+    [-t|--outputFileType <outputFileType>]
     The output file type. If different to <outputFileStem> extension,
-    will override extension in favour of <outputFileType>. Should be a 'png' or 'jpg'
+    will override extension in favour of <outputFileType>.
 
-    [--label] <prefixForLabelDirectories>
-    Adds a prefix to each Label directory name
+    Should be a ``png`` or ``jpg``.
 
-    [-n] [--normalize]
-    If specified, will normalize the output image pixels to 0 and 1 values.
+    [--label <prefixForLabelDirectories>]
+    Prefixes the string <prefixForLabelDirectories> to each filtered
+    directory name. This is mostly for possible downstream processing,
+    allowing a subsequent operation to easily determine which of the output
+    directories correspond to labels.
 
-    [-l] [--lookuptable] <LUTcolumnToNameDirectories>
-    Specifies if the label directories that are created should be named 
-    according to Label Number or Label Name. 
-    Can be either "__val__", or <LUTFilename.txt> provided by user from the inputdir, 
-    Default is "__val__" which is Label Numbers
+    [-n|--normalize]
+    If specified, will normalize the output image pixel values to
+    0 and 1, otherwise pixel image values will retain the value in
+    the original input volume.
 
-    [-s] [--skipLabelValueList] <ListOfLabelNumbersToSkip>
+    [-l|--lookuptable <LUTfile>]
+    If passed, perform a looktup on the filtered voxel label values
+    according to the contents of the <LUTfile>. This <LUTfile> should
+    conform to the FreeSurfer lookup table format (documented elsewhere).
+
+    Note that the special <LUTfile> string ``__val__`` can be passed which
+    effectively means "no <LUTfile>". In this case, the numerical voxel
+    values are used for output directory names. This special string is
+    really only useful for scripted cases of running this application when
+    modifying the CLI is more complex than simply setting the <LUTfile> to
+    ``__val__``.
+
+    [-s|--skipLabelValueList <ListOfLabelNumbersToSkip>]
     If specified as a comma separated string of label numbers,
     will not create directories of those label numbers.
 
-    [-w] [--wholeVolume] <NameOfDirectoryWithAllVolumeLabels>
-    If specified, creates a diretory called "WholeVolume" (within the outputdir) 
-    containing PNG/JPG files including all labels.
+    [-f|--filterLabelValues <ListOfVoxelValuesToInclude>]
+    The logical inverse of the [skipLabelValueList] flag. If specified,
+    only filter the comma separated list of passed voxel values from the
+    input volume.
 
-    [-h] [--help]
+    The detault value of "-1" implies all voxel values should be filtered.
+
+    [-w|--wholeVolume <wholeVolDirName>]
+    If specified, creates a diretory called <wholeVolDirName> (within the
+    outputdir) containing PNG/JPG images files of the entire input.
+
+    This effectively really creates a PNG/JPG conversion of the input
+    mgz file.
+
+    Values in the image files will be the same as the original voxel
+    values in the ``mgz``, unless the [--normalize] flag is specified
+    in which case this creates a single-value mask of the input image.
+
+    [-h|--help]
     If specified, show help message and exit.
-    
+
     [--json]
     If specified, show json representation of app and exit.
-    
+
     [--man]
     If specified, print (this) man page and exit.
 
     [--meta]
-    If specified, print plugin meta data and exit.
-    
-    [--savejson <DIR>] 
-    If specified, save json representation file to DIR and exit. 
-    
-    [-v <level>] [--verbosity <level>]
-    Verbosity level for app. Not used currently.
-    
-    [--version]
-    If specified, print version number and exit. 
+    If specified, print plugin meta np_data and exit.
 
-    [-y] [--synopsis]
+    [--savejson <DIR>]
+    If specified, save json representation file to DIR and exit.
+
+    [-v <level>|--verbosity <level>]
+    Verbosity level for app. Not used currently.
+
+    [--version]
+    If specified, print version number and exit.
+
+    [-y|--synopsis]
     Show short synopsis.
 
 
