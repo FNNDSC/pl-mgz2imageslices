@@ -26,7 +26,7 @@ Synopsis
 
 .. code::
 
-    python mgz2imgslices.py                                         \
+    python mgz2imgslices.py                                             \
             [-i] [--inputFile] <inputFile>                              \
             [-o] [--outputFileStem] <outputFileStem>                    \
             [-t] [--outputFileType] <outputFileType>                    \
