@@ -56,6 +56,7 @@ It filters all the labels within a ``.mgz`` file and stores all the slices corre
 
 **NOTE:** 
 
+
 For a more detailed description, go through the documentation on the page below:
     https://github.com/FNNDSC/mgz2imgslices
     
