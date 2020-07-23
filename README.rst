@@ -56,10 +56,10 @@ It filters all the labels within a ``.mgz`` file and stores all the slices corre
 
 **NOTE:** 
 
-- For a more detailed description, go through the documentation on the page below:
+For a more detailed description, go through the documentation on the page below:
     https://github.com/FNNDSC/mgz2imgslices
     
-- Labels represent the different cortical segments of the brain. 
+Labels represent the different cortical segments of the brain. 
 Refer to the file: ``FreeSurferColorLUT.txt`` in this repository for names and IDs of all the labels that a ``.mgz`` can have.  
 
 Arguments
