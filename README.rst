@@ -16,7 +16,10 @@ pl-mgz2imgslices
 Abstract
 --------
 
-A ChRIS pulgin to convert ``.mgz`` files to readable formats like PNGs or JPEGs.
+A ChRIS DS plugin about the mgz2imgslices python module. 
+Please refer here for documentation using the link provided below:
+
+https://github.com/FNNDSC/mgz2imgslices
 
 
 Synopsis
@@ -49,7 +52,7 @@ Description
 
 ``mgz2imgslices.py`` is a ChRIS-based application that convert ``.mgz`` files to readable formats like PNGs or JPEGs.
 
-It bifurcates all the labels within a ``.mgz`` file and stores all the slices corresponding to each label within individual directories named after the label number. 
+It filters all the labels within a ``.mgz`` file and stores all the slices corresponding to each label within individual directories named after the label number. 
 
 **NOTE:** 
 
@@ -82,8 +85,7 @@ Arguments
     [-l] [--lookuptable] <LUTcolumnToNameDirectories>
     Specifies if the label directories that are created should be named 
     according to Label Number or Label Name. 
-    Can be either "__val__", "__fs__"(uses the built in FreeSurferColorLUT.txt) 
-    or <LUTFilename.txt> provided by user from the inputdir, 
+    Can be either "__val__", or <LUTFilename.txt> provided by user from the inputdir, 
     Default is "__val__" which is Label Numbers
 
     [-s] [--skipLabelValueList] <ListOfLabelNumbersToSkip>
