@@ -16,8 +16,7 @@ pl-mgz2imgslices
 Abstract
 --------
 
-A ChRIS DS plugin about the mgz2imgslices python module. 
-Please refer here for documentation using the link provided below:
+A ChRIS DS plugin that containerizes the ``mgz2imgslices`` python module. Please use the link below for more detailed documentation on ``mgz2imgslices``:
 
 https://github.com/FNNDSC/mgz2imgslices
 
@@ -50,18 +49,13 @@ Synopsis
 Description
 -----------
 
-``mgz2imgslices.py`` is a ChRIS-based application that convert ``.mgz`` files to readable formats like PNGs or JPEGs.
+``pl-mgz2imgslices`` is a ChRIS-based plugin that uses ``mgz2imgslices`` to processes FreeSurfer formatted ``mgz`` volume files and create a set of output directories. Each output directory corresponds to a single voxel value in the ``mgz`` input. Within each directory are a set of ``png`` (or ``jpg``) 2D images -- each image corresponding to one slice of the original volume, and tuned/filtered to only contain that single voxel value.
 
-It filters all the labels within a ``.mgz`` file and stores all the slices corresponding to each label within individual directories named after the label number. 
-
-For more detailed description, go to the following page:
-https://github.com/FNNDSC/mgz2imgslices
+For more detailed description, consult the documentation here https://github.com/FNNDSC/mgz2imgslices
 
 **NOTE:** 
 
-
-Labels represent the different cortical segments of the brain. 
-Refer to the file: ``FreeSurferColorLUT.txt`` in this repository for names and IDs of all the labels that a ``.mgz`` can have.  
+In the instances where the input ``mgz`` volume voxel values are interpreted to imply *labels* (i.e. segmented cortical regions), this plugin can use the embedded  FreeSurfer ``FreeSurferColorLUT.txt`` file to map FreeSurfer *label* IDs to human readable cortical label strings in the naming of output directories.
 
 Arguments
 ---------
