@@ -29,7 +29,7 @@ from    pfmisc.debug        import  debug
 from chrisapp.base import ChrisApp
 from mgz2imgslices import mgz2imgslices
 
-class Mgz2imgslices(ChrisApp):
+class Mgz2imageslices(ChrisApp):
     """
     An app to ....
     """
@@ -295,5 +295,5 @@ class Mgz2imgslices(ChrisApp):
 
 # ENTRYPOINT
 if __name__ == "__main__":
-    app = Mgz2imgslices()
+    app = Mgz2imageslices()
     app.launch()
