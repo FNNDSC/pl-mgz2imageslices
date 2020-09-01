@@ -27,7 +27,7 @@ FROM fnndsc/ubuntu-python3:latest
 MAINTAINER fnndsc "dev@babymri.org"
 
 ENV APPROOT="/usr/src/mgz2imgslices"
-COPY ["mgz2imgslices", "${APPROOT}"]
+COPY ["mgz2imageslices", "${APPROOT}"]
 COPY ["requirements.txt", "${APPROOT}"]
 
 WORKDIR $APPROOT
@@ -35,4 +35,4 @@ WORKDIR $APPROOT
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 
-CMD ["mgz2imgslices.py", "--help"]
+CMD ["mgz2imageslices.py", "--help"]
