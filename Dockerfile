@@ -26,7 +26,7 @@
 FROM fnndsc/ubuntu-python3:latest
 MAINTAINER fnndsc "dev@babymri.org"
 
-ENV APPROOT="/usr/src/mgz2imgslices"
+ENV APPROOT="/usr/src/mgz2imageslices"
 COPY ["mgz2imageslices", "${APPROOT}"]
 COPY ["requirements.txt", "${APPROOT}"]
 
