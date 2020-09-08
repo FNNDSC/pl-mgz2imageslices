@@ -77,6 +77,10 @@ Arguments
 
     Should be a ``png``.
 
+    [--image]
+    If specified as True(boolean), will save the slices of the mgz file as
+    ".png" image files along with the numpy files.
+
     [--label <prefixForLabelDirectories>]
     Prefixes the string <prefixForLabelDirectories> to each filtered
     directory name. This is mostly for possible downstream processing,
