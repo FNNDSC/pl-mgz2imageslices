@@ -42,7 +42,7 @@ class Mgz2imgslices(ChrisApp):
     TYPE                    = 'ds'
     DESCRIPTION             = 'An app to convert mgz volumes to numpy arrays and png image formats'
     DOCUMENTATION           = 'https://github.com/FNNDSC/pl-mgz2imgslices'
-    VERSION                 = '0.1'
+    VERSION                 = '0.2'
     ICON                    = '' # url of an icon image
     LICENSE                 = 'Opensource (MIT)'
     MAX_NUMBER_OF_WORKERS   = 1  # Override with integer value
@@ -82,6 +82,9 @@ class Mgz2imgslices(ChrisApp):
         self.add_argument('-t', '--outputFileType', dest='outputFileType', type=str,
                           default='png', optional=True, help='output image file format')
 
+        self.add_argument('--image', dest='image', type=bool, default=False, 
+                          optional=True, help='store png images for each slice of mgz file')
+
         self.add_argument('--label', dest='label', type=str,
                           default='label', optional=True, help='prefix a label to all the label directories')
 
@@ -119,6 +122,7 @@ class Mgz2imgslices(ChrisApp):
             [-I|--inputDir <inputDir>]                                  \\
             [-o|--outputFileStem]<outputFileStem>]                      \\
             [-t|--outputFileType <outputFileType>]                      \\
+            [--image]
             [--label <prefixForLabelDirectories>]                       \\
             [-n|--normalize]                                            \\
             [-l|--lookuptable <LUTfile>]                                \\
@@ -175,7 +179,11 @@ class Mgz2imgslices(ChrisApp):
             The output file type. If different to <outputFileStem> extension,
             will override extension in favour of <outputFileType>.
 
-            Should be a ``png`` or ``jpg``.
+            Should be a ``png``.
+
+            [--image]
+            If specified as True(boolean), will save the slices of the mgz file as
+            ".png" image files along with the numpy files.
 
             [--label <prefixForLabelDirectories>]
             Prefixes the string <prefixForLabelDirectories> to each filtered 

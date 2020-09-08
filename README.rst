@@ -31,6 +31,7 @@ Synopsis
             [-o] [--outputFileStem] <outputFileStem>                    \
             [-t] [--outputFileType] <outputFileType>                    \
             [--label] <prefixForLabelDirectories>                       \
+            [--image]
             [-n] [--normalize]                                          \
             [-l] [--lookuptable] <LUTcolumnToNameDirectories>           \
             [-s] [--skipLabelValueList] <ListOfLabelNumbersToSkip>      \
@@ -74,7 +75,7 @@ Arguments
     The output file type. If different to <outputFileStem> extension,
     will override extension in favour of <outputFileType>.
 
-    Should be a ``png`` or ``jpg``.
+    Should be a ``png``.
 
     [--label <prefixForLabelDirectories>]
     Prefixes the string <prefixForLabelDirectories> to each filtered
@@ -210,8 +211,8 @@ Copy and modify the different commands below as needed:
         fnndsc/pl-mgz2imgslices mgz2imgslices.py            \
         -i aparc.a2009s+aseg.mgz                            \
         -o sample                                           \
-        -t jpg                                              \
-        --lookuptable __fs__                                \
+        -t png                                              \
+        --lookuptable __val__                               \
         --skipLabelValueList 0,2                            \
         --normalize                                         \
         --wholeVolume entireVolume                          \ 
