@@ -88,7 +88,7 @@ class Mgz2imgslices(ChrisApp):
         self.add_argument('--label', dest='label', type=str,
                           default='label', optional=True, help='prefix a label to all the label directories')
 
-        self.add_argument('-n', '--normalize', dest='normalize', type=bool, 
+        self.add_argument('-n', '--normalize', dest='normalize', type=bool, action='store_true',
                             default=False, optional=True, help='normalize the pixels of output image files')
 
         self.add_argument('-l', '--lookuptable', dest='lookuptable', type=str, 
