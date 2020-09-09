@@ -29,7 +29,7 @@ from    pfmisc.debug        import  debug
 from chrisapp.base import ChrisApp
 from mgz2imgslices import mgz2imgslices
 
-class Mgz2imageslices(ChrisApp):
+class Mgz2imgslices(ChrisApp):
     """
     An app to ....
     """
@@ -40,9 +40,9 @@ class Mgz2imageslices(ChrisApp):
     TITLE                   = 'A ChRIS plugin app that converts mgz files to png or jpeg alongwith some special features that make it usable even as part of other project workflows.'
     CATEGORY                = ''
     TYPE                    = 'ds'
-    DESCRIPTION             = 'An app to convert mgz volumes to png or jpeg (more easilt viewable) formats'
+    DESCRIPTION             = 'An app to convert mgz volumes to numpy arrays and png image formats'
     DOCUMENTATION           = 'https://github.com/FNNDSC/pl-mgz2imgslices'
-    VERSION                 = '0.1'
+    VERSION                 = '0.2'
     ICON                    = '' # url of an icon image
     LICENSE                 = 'Opensource (MIT)'
     MAX_NUMBER_OF_WORKERS   = 1  # Override with integer value
@@ -82,10 +82,13 @@ class Mgz2imageslices(ChrisApp):
         self.add_argument('-t', '--outputFileType', dest='outputFileType', type=str,
                           default='png', optional=True, help='output image file format')
 
+        self.add_argument('--image', dest='image', type=bool, action='store_true',
+                          default=False, optional=True, help='store png images for each slice of mgz file')
+
         self.add_argument('--label', dest='label', type=str,
                           default='label', optional=True, help='prefix a label to all the label directories')
 
-        self.add_argument('-n', '--normalize', dest='normalize', type=bool, 
+        self.add_argument('-n', '--normalize', dest='normalize', type=bool, action='store_true',
                             default=False, optional=True, help='normalize the pixels of output image files')
 
         self.add_argument('-l', '--lookuptable', dest='lookuptable', type=str, 
@@ -119,6 +122,7 @@ class Mgz2imageslices(ChrisApp):
             [-I|--inputDir <inputDir>]                                  \\
             [-o|--outputFileStem]<outputFileStem>]                      \\
             [-t|--outputFileType <outputFileType>]                      \\
+            [--image]
             [--label <prefixForLabelDirectories>]                       \\
             [-n|--normalize]                                            \\
             [-l|--lookuptable <LUTfile>]                                \\
@@ -175,7 +179,11 @@ class Mgz2imageslices(ChrisApp):
             The output file type. If different to <outputFileStem> extension,
             will override extension in favour of <outputFileType>.
 
-            Should be a ``png`` or ``jpg``.
+            Should be a ``png``.
+
+            [--image]
+            If specified as True(boolean), will save the slices of the mgz file as
+            ".png" image files along with the numpy files.
 
             [--label <prefixForLabelDirectories>]
             Prefixes the string <prefixForLabelDirectories> to each filtered 
@@ -295,5 +303,5 @@ class Mgz2imageslices(ChrisApp):
 
 # ENTRYPOINT
 if __name__ == "__main__":
-    app = Mgz2imageslices()
+    app = Mgz2imgslices()
     app.launch()
