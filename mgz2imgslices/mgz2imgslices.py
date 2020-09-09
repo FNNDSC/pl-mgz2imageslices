@@ -82,13 +82,13 @@ class Mgz2imgslices(ChrisApp):
         self.add_argument('-t', '--outputFileType', dest='outputFileType', type=str,
                           default='png', optional=True, help='output image file format')
 
-        self.add_argument('--image', dest='image', type=bool, action='store_true',
+        self.add_argument('--image', dest='image', type=bool,
                           default=False, optional=True, help='store png images for each slice of mgz file')
 
         self.add_argument('--label', dest='label', type=str,
                           default='label', optional=True, help='prefix a label to all the label directories')
 
-        self.add_argument('--normalize', dest='normalize', type=bool, action='store_true',
+        self.add_argument('-n', '--normalize', dest='normalize', type=bool,
                             default=False, optional=True, help='normalize the pixels of output image files')
 
         self.add_argument('-l', '--lookuptable', dest='lookuptable', type=str, 
