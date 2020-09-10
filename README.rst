@@ -1,4 +1,4 @@
-pl-mgz2imgslices
+pl-mgz2imageslices
 ================================
 
 .. image:: https://badge.fury.io/py/mgz2imgslices.svg
@@ -50,7 +50,7 @@ Synopsis
 Description
 -----------
 
-``pl-mgz2imgslices`` is a ChRIS-based plugin that uses ``mgz2imgslices`` to processes FreeSurfer formatted ``mgz`` volume files and create a set of output directories. Each output directory corresponds to a single voxel value in the ``mgz`` input. Within each directory are a set of ``png`` (or ``jpg``) 2D images -- each image corresponding to one slice of the original volume, and tuned/filtered to only contain that single voxel value.
+``pl-mgz2imageslices`` is a ChRIS-based plugin that uses ``mgz2imgslices`` to processes FreeSurfer formatted ``mgz`` volume files and create a set of output directories. Each output directory corresponds to a single voxel value in the ``mgz`` input. Within each directory are a set of ``png`` (or ``jpg``) 2D images -- each image corresponding to one slice of the original volume, and tuned/filtered to only contain that single voxel value.
 
 For more detailed description, consult the documentation here https://github.com/FNNDSC/mgz2imgslices
 
@@ -155,7 +155,7 @@ Arguments
 Run
 ----
 
-While ``pl-mgz2imgslices`` is meant to be run as a containerized docker image, typcially within ChRIS, it is quite possible to run the dockerized plugin directly from the command line as well. The following instructions are meant to be a psuedo- ``jupyter-notebook`` inspired style where if you follow along and copy/paste into a terminal you should be able to run all the examples.
+While ``pl-mgz2imageslices`` is meant to be run as a containerized docker image, typcially within ChRIS, it is quite possible to run the dockerized plugin directly from the command line as well. The following instructions are meant to be a psuedo- ``jupyter-notebook`` inspired style where if you follow along and copy/paste into a terminal you should be able to run all the examples.
 
 First, let's create a directory, say ``devel`` wherever you feel like it. We will place some test data in this directory to process with this plugin.
 
@@ -195,11 +195,11 @@ To run using ``docker``, be sure to assign an "input" directory to ``/incoming``
 
     mkdir results && chmod 777 results
 
-- Pull the ``fnndsc/pl-mgz2imgslices`` image using the following command.
+- Pull the ``fnndsc/pl-mgz2imageslices`` image using the following command.
 
 .. code:: bash
 
-    docker pull fnndsc/pl-mgz2imgslices
+    docker pull fnndsc/pl-mgz2imageslices
 
 Examples
 --------
@@ -212,7 +212,7 @@ Copy and modify the different commands below as needed:
     docker run --rm                                     \
         -v ${DEVEL}/mgz_converter_dataset/100307/:/incoming \
         -v ${DEVEL}/results/:/outgoing                      \
-        fnndsc/pl-mgz2imgslices mgz2imgslices.py            \
+        fnndsc/pl-mgz2imageslices mgz2imageslices.py            \
         -i aparc.a2009s+aseg.mgz                            \
         -o sample                                           \
         -t png                                              \
