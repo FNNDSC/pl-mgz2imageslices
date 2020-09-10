@@ -209,18 +209,18 @@ Copy and modify the different commands below as needed:
 .. code:: bash
 
     mkdir in out && chmod 777 out
-    docker run --rm                                     \
-        -v ${DEVEL}/mgz_converter_dataset/100307/:/incoming \
-        -v ${DEVEL}/results/:/outgoing                      \
+    docker run --rm                                          \
+        -v ${DEVEL}/mgz_converter_dataset/100307/:/incoming     \
+        -v ${DEVEL}/results/:/outgoing                          \
         fnndsc/pl-mgz2imageslices mgz2imageslices.py            \
-        -i aparc.a2009s+aseg.mgz                            \
-        -o sample                                           \
-        -t png                                              \
-        --lookuptable __val__                               \
-        --skipLabelValueList 0,2                            \
-        --normalize                                         \
-        --wholeVolume entireVolume                          \ 
-        --verbosity 1                                       \
+        -i aparc.a2009s+aseg.mgz                                \
+        -o sample                                               \
+        -t png                                                  \
+        --lookuptable __val__                                   \
+        --skipLabelValueList 0,2                                \
+        --normalize                                             \
+        --wholeVolume entireVolume                              \    
+        --verbosity 1                                           \
         /incoming /outgoing
 
 
