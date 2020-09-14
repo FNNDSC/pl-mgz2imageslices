@@ -34,5 +34,6 @@ WORKDIR $APPROOT
 
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
+RUN pip install -U mgz2imgslices
 
 CMD ["mgz2imageslices.py", "--help"]
