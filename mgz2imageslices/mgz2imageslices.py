@@ -42,7 +42,7 @@ class Mgz2imgslices(ChrisApp):
     TYPE                    = 'ds'
     DESCRIPTION             = 'An app to convert mgz volumes to numpy arrays and png image formats'
     DOCUMENTATION           = 'https://github.com/FNNDSC/pl-mgz2imgslices'
-    VERSION                 = '0.3'
+    VERSION                 = '1.3'
     ICON                    = '' # url of an icon image
     LICENSE                 = 'Opensource (MIT)'
     MAX_NUMBER_OF_WORKERS   = 1  # Override with integer value
