@@ -75,11 +75,11 @@ Arguments
     The output file type. If different to <outputFileStem> extension,
     will override extension in favour of <outputFileType>.
 
-    Should be a ``png``.
+    Should be a ``png`` or ``jpg``.
 
     [--image]
     If specified as True(boolean), will save the slices of the mgz file as
-    ".png" image files along with the numpy files.
+    ".png" or ".jpg" image files along with the numpy files.
 
     [--label <prefixForLabelDirectories>]
     Prefixes the string <prefixForLabelDirectories> to each filtered
@@ -219,6 +219,7 @@ Copy and modify the different commands below as needed:
         --lookuptable __val__                                   \
         --skipLabelValueList 0,2                                \
         --normalize                                             \
+        --image                                                 \
         --wholeVolume entireVolume                              \    
         --verbosity 1                                           \
         /incoming /outgoing
