@@ -104,6 +104,11 @@ Arguments
     modifying the CLI is more complex than simply setting the <LUTfile> to
     ``__val__``.
 
+    While running the docker image, you can also pass ``__fs__`` which will use
+    the FreeSurferColorLUT.txt from within the docker container to perform a 
+    looktup on the filtered voxel label values according to the contents of 
+    the FreeSurferColorLUT.txt
+
     [-s|--skipLabelValueList <ListOfLabelNumbersToSkip>]
     If specified as a comma separated string of label numbers,
     will not create directories of those label numbers.
