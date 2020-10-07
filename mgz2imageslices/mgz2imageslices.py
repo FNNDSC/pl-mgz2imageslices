@@ -82,7 +82,7 @@ class Mgz2imgslices(ChrisApp):
         self.add_argument('-t', '--outputFileType', dest='outputFileType', type=str,
                           default='png', optional=True, help='output image file format')
 
-        self.add_argument('--image', dest='image', type=bool, action='store_true',
+        self.add_argument('--saveImages', dest='saveImages', type=bool, action='store_true',
                           default=False, optional=True, help='store png images for each slice of mgz file')
 
         self.add_argument('--label', dest='label', type=str,
@@ -91,7 +91,7 @@ class Mgz2imgslices(ChrisApp):
         self.add_argument('-n', '--normalize', dest='normalize', type=bool, action='store_true',
                             default=False, optional=True, help='normalize the pixels of output image files')
 
-        self.add_argument('-l', '--lookuptable', dest='lookuptable', type=str, 
+        self.add_argument('-l', '--lookupTable', dest='lookupTable', type=str, 
                             default='__val__', optional=True, help='reads name for the Label directories')
 
         self.add_argument('-y', '--synopsis', dest='synopsis', type=bool, action='store_true',
@@ -122,10 +122,10 @@ class Mgz2imgslices(ChrisApp):
             [-I|--inputDir <inputDir>]                                  \\
             [-o|--outputFileStem]<outputFileStem>]                      \\
             [-t|--outputFileType <outputFileType>]                      \\
-            [--image]
+            [--saveImages]
             [--label <prefixForLabelDirectories>]                       \\
             [-n|--normalize]                                            \\
-            [-l|--lookuptable <LUTfile>]                                \\
+            [-l|--lookupTable <LUTfile>]                                \\
             [-s|--skipLabelValueList <ListOfVoxelValuesToSkip>]         \\
             [-f|--filterLabelValueList <ListOfVoxelValuesToInclude>]       \\
             [-w|--wholeVolume <wholeVolDirName>]                        \\
@@ -181,7 +181,7 @@ class Mgz2imgslices(ChrisApp):
 
             Should be a ``png``.
 
-            [--image]
+            [--saveImages]
             If specified as True(boolean), will save the slices of the mgz file as
             ".png" image files along with the numpy files.
 
@@ -196,7 +196,7 @@ class Mgz2imgslices(ChrisApp):
             0 and 1, otherwise pixel image values will retain the value in
             the original input volume.
 
-            [-l|--lookuptable <LUTfile>]
+            [-l|--lookupTable <LUTfile>]
             If passed, perform a lookup on the filtered voxel label values
             according to the contents of the <LUTfile>. This <LUTfile> should
             conform to the FreeSurfer lookup table format (documented elsewhere).

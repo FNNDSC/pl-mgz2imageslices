@@ -31,9 +31,9 @@ Synopsis
             [-o] [--outputFileStem] <outputFileStem>                    \
             [-t] [--outputFileType] <outputFileType>                    \
             [--label] <prefixForLabelDirectories>                       \
-            [--image]
+            [--saveImages]
             [-n] [--normalize]                                          \
-            [-l] [--lookuptable] <LUTcolumnToNameDirectories>           \
+            [-l] [--lookupTable] <LUTcolumnToNameDirectories>           \
             [-s] [--skipLabelValueList] <ListOfLabelNumbersToSkip>      \
             [-w] [--wholeVolume] <NameOfDirectoryWithAllVolumeLabels>   \
             [-h] [--help]                                               \
@@ -77,7 +77,7 @@ Arguments
 
     Should be a ``png`` or ``jpg``.
 
-    [--image]
+    [--saveImages]
     If specified as True(boolean), will save the slices of the mgz file as
     ".png" or ".jpg" image files along with the numpy files.
 
@@ -92,7 +92,7 @@ Arguments
     0 and 1, otherwise pixel image values will retain the value in
     the original input volume.
 
-    [-l|--lookuptable <LUTfile>]
+    [-l|--lookupTable <LUTfile>]
     If passed, perform a looktup on the filtered voxel label values
     according to the contents of the <LUTfile>. This <LUTfile> should
     conform to the FreeSurfer lookup table format (documented elsewhere).
@@ -221,10 +221,10 @@ Copy and modify the different commands below as needed:
         -i aparc.a2009s+aseg.mgz                                \
         -o sample                                               \
         -t png                                                  \
-        --lookuptable __val__                                   \
+        --lookupTable __val__                                   \
         --skipLabelValueList 0,2                                \
         --normalize                                             \
-        --image                                                 \
+        --saveImages                                                 \
         --wholeVolume entireVolume                              \    
         --verbosity 1                                           \
         /incoming /outgoing
