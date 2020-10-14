@@ -224,7 +224,7 @@ Copy and modify the different commands below as needed:
         --lookupTable __val__                                   \
         --skipLabelValueList 0,2                                \
         --normalize                                             \
-        --saveImages                                                 \
+        --saveImages                                            \
         --wholeVolume entireVolume                              \    
         --verbosity 1                                           \
         /incoming /outgoing
