@@ -94,8 +94,8 @@ Arguments
 
     [-l|--lookupTable <LUTfile>]
     If passed, perform a looktup on the filtered voxel label values
-    according to the contents of the <LUTfile>. This <LUTfile> should
-    conform to the FreeSurfer lookup table format (documented elsewhere).
+    according to the contents of the FreeSurferColorLUT.txt. This FreeSurferColorLUT.txt
+    should conform to the FreeSurfer lookup table format (documented elsewhere).
 
     Note that the special <LUTfile> string ``__val__`` can be passed which
     effectively means "no <LUTfile>". In this case, the numerical voxel
