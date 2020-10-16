@@ -213,7 +213,6 @@ Copy and modify the different commands below as needed:
 
 .. code:: bash
 
-    mkdir in out && chmod 777 out
     docker run --rm                                          \
         -v ${DEVEL}/mgz_converter_dataset/100307/:/incoming     \
         -v ${DEVEL}/results/:/outgoing                          \
