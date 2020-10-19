@@ -106,6 +106,9 @@ class Mgz2imgslices(ChrisApp):
         self.add_argument('-w', '--wholeVolume', dest='wholeVolume', type=str, 
                           default="wholeVolume", optional=True, 
                           help='Converts entire mgz volume to png/jpg instead of individually masked labels')
+
+        self.add_argument('--optimize', dest='optimize', type=bool, action='store_true',
+                            default=True, optional=True, help='Speed up the execution time')
                         
         self.add_argument('--printElapsedTime', dest='printElapsedTime', type=bool, action='store_true',
                           default=False, optional=True, help='print program run time')
@@ -116,19 +119,19 @@ class Mgz2imgslices(ChrisApp):
         NAME
     	    pl-mgz2imgslices - convert mgz volumes to jpg/png/etc.
         SYNOPSIS
-                %s                                       \\
             -i|--inputFile <inputFile>                                  \\
             -d|--outputDir <outputDir>                                  \\
             [-I|--inputDir <inputDir>]                                  \\
             [-o|--outputFileStem]<outputFileStem>]                      \\
             [-t|--outputFileType <outputFileType>]                      \\
-            [--saveImages]
+            [--saveImages]                                              \\
             [--label <prefixForLabelDirectories>]                       \\
             [-n|--normalize]                                            \\
             [-l|--lookupTable <LUTfile>]                                \\
             [-s|--skipLabelValueList <ListOfVoxelValuesToSkip>]         \\
-            [-f|--filterLabelValueList <ListOfVoxelValuesToInclude>]       \\
+            [-f|--filterLabelValueList <ListOfVoxelValuesToInclude>]    \\
             [-w|--wholeVolume <wholeVolDirName>]                        \\
+            [--optimize]                                                \\
             [-h|--help]                                                 \\
             [--json]                                                    \\
             [--man]                                                     \\
@@ -229,6 +232,9 @@ class Mgz2imgslices(ChrisApp):
             Values in the image files will be the same as the original voxel
             values in the ``mgz``, unless the [--normalize] flag is specified
             in which case this creates a single-value mask of the input image.
+
+            [--optimize] 
+            If passed, optimizes the storage of the png/jpg images significantly.
 
             [-h|--help]
             If specified, show help message and exit.

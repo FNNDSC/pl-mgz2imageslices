@@ -31,11 +31,12 @@ Synopsis
             [-o] [--outputFileStem] <outputFileStem>                    \
             [-t] [--outputFileType] <outputFileType>                    \
             [--label] <prefixForLabelDirectories>                       \
-            [--saveImages]
+            [--saveImages]                                              \
             [-n] [--normalize]                                          \
             [-l] [--lookupTable] <LUTcolumnToNameDirectories>           \
             [-s] [--skipLabelValueList] <ListOfLabelNumbersToSkip>      \
             [-w] [--wholeVolume] <NameOfDirectoryWithAllVolumeLabels>   \
+            [--optimize]                                                \
             [-h] [--help]                                               \
             [--json]                                                    \
             [--man]                                                     \
@@ -130,6 +131,9 @@ Arguments
     Values in the image files will be the same as the original voxel
     values in the ``mgz``, unless the [--normalize] flag is specified
     in which case this creates a single-value mask of the input image.
+
+    [--optimize] 
+    If passed, optimizes the storage of the png/jpg images significantly.
 
     [-h|--help]
     If specified, show help message and exit.
