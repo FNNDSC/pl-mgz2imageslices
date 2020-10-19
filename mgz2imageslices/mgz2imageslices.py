@@ -8,6 +8,9 @@
 #                        dev@babyMRI.org
 #
 
+# Turn off all logging for modules in this libary.
+import logging
+logging.disable(logging.CRITICAL)
 
 import os
 import sys
