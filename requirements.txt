@@ -5,6 +5,5 @@ nibabel
 imageio
 pfmisc
 pandas
-mgz2imgslices
 matplotlib
 scikit-image
