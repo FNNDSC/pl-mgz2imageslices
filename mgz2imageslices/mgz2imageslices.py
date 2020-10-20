@@ -27,7 +27,11 @@ import  pfmisc
 from    pfmisc._colors      import  Colors
 from    pfmisc.debug        import  debug
 
+import time
+# from timer import Timer
 
+# tcore = Timer()
+# twholeapp = Timer()
 # import the Chris app superclass
 from chrisapp.base import ChrisApp
 from mgz2imgslices import mgz2imgslices
@@ -109,10 +113,7 @@ class Mgz2imgslices(ChrisApp):
         self.add_argument('-w', '--wholeVolume', dest='wholeVolume', type=str, 
                           default="wholeVolume", optional=True, 
                           help='Converts entire mgz volume to png/jpg instead of individually masked labels')
-
-        self.add_argument('--optimize', dest='optimize', type=bool, action='store_true',
-                            default=True, optional=True, help='Speed up the execution time')
-                        
+             
         self.add_argument('--printElapsedTime', dest='printElapsedTime', type=bool, action='store_true',
                           default=False, optional=True, help='print program run time')
 
@@ -308,6 +309,7 @@ class Mgz2imgslices(ChrisApp):
 
         except Exception as e:
             traceback.print_exc()
+
 
 
 # ENTRYPOINT
