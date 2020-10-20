@@ -135,7 +135,6 @@ class Mgz2imgslices(ChrisApp):
             [-s|--skipLabelValueList <ListOfVoxelValuesToSkip>]         \\
             [-f|--filterLabelValueList <ListOfVoxelValuesToInclude>]    \\
             [-w|--wholeVolume <wholeVolDirName>]                        \\
-            [--optimize]                                                \\
             [-h|--help]                                                 \\
             [--json]                                                    \\
             [--man]                                                     \\
