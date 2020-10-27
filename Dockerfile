@@ -34,6 +34,6 @@ COPY ["FreeSurferColorLUT.txt", "/usr/src/"]
 WORKDIR $APPROOT
 
 RUN pip install --upgrade pip \
-    && pip install -r -U requirements.txt
+    && pip install -U -r requirements.txt
 
 CMD ["mgz2imageslices.py", "--help"]
