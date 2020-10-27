@@ -29,11 +29,11 @@ MAINTAINER fnndsc "dev@babymri.org"
 ENV APPROOT="/usr/src/mgz2imageslices"
 COPY ["mgz2imageslices", "${APPROOT}"]
 COPY ["requirements.txt", "${APPROOT}"]
+COPY ["FreeSurferColorLUT.txt", "/usr/src/"]
 
 WORKDIR $APPROOT
 
-RUN pip install --upgrade pip
-RUN pip install -r requirements.txt
-RUN pip install -U mgz2imgslices
+RUN pip install --upgrade pip \
+    && pip install -r -U requirements.txt
 
 CMD ["mgz2imageslices.py", "--help"]

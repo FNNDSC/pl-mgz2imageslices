@@ -104,6 +104,9 @@ class Mgz2imgslices(ChrisApp):
         self.add_argument('-y', '--synopsis', dest='synopsis', type=bool, action='store_true',
                           default=False, optional=True, help='short synopsis')
 
+        self.add_argument('--skipAllLabels', dest='skipAllLabels', type=bool, action='store_true',
+                            default=False, optional=True, help='skip all labels and create only whole Volume images')
+
         self.add_argument('-s', '--skipLabelValueList', dest='skipLabelValueList', type=str, 
                           default='', optional=True, help='Comma separated list of labels to skip')
 
@@ -132,6 +135,7 @@ class Mgz2imgslices(ChrisApp):
             [--label <prefixForLabelDirectories>]                       \\
             [-n|--normalize]                                            \\
             [-l|--lookupTable <LUTfile>]                                \\
+            [--skipAllLabels]                                           \\
             [-s|--skipLabelValueList <ListOfVoxelValuesToSkip>]         \\
             [-f|--filterLabelValueList <ListOfVoxelValuesToInclude>]    \\
             [-w|--wholeVolume <wholeVolDirName>]                        \\
@@ -213,6 +217,9 @@ class Mgz2imgslices(ChrisApp):
             really only useful for scripted cases of running this application when
             modifying the CLI is more complex than simply setting the <LUTfile> to
             ``__val__``.
+
+            [--skipAllLabels]
+            Skips all labels and converts only the whole mgz volume to png/jpg images.
 
             [-s|--skipLabelValueList <ListOfLabelNumbersToSkip>]
             If specified as a comma separated string of label numbers,

@@ -7,3 +7,4 @@ pfmisc
 pandas
 matplotlib
 scikit-image
+mgz2imgslices
