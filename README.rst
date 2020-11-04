@@ -98,12 +98,13 @@ Arguments
     according to the contents of the FreeSurferColorLUT.txt. This FreeSurferColorLUT.txt
     should conform to the FreeSurfer lookup table format (documented elsewhere).
 
-    Note that the special <LUTfile> string ``__val__`` can be passed which
-    effectively means "no <LUTfile>". In this case, the numerical voxel
-    values are used for output directory names. This special string is
-    really only useful for scripted cases of running this application when
-    modifying the CLI is more complex than simply setting the <LUTfile> to
-    ``__val__``.
+    Note that the special <LUTfile> string ``__val__``, ``__fs__`` or ``__none__``
+    can be passed only when running the docker image (fnndsc/pl-mgz2imageslices)
+    of this utility which effectively means "no <LUTfile>".
+    In this case, the numerical voxel values are used for output directory names.
+    This special string is really only useful for scripted cases of running
+    this application when modifying the CLI is more complex than simply setting
+    the <LUTfile> to ``__val__``.
 
     While running the docker image, you can also pass ``__fs__`` which will use
     the FreeSurferColorLUT.txt from within the docker container to perform a 
@@ -152,6 +153,9 @@ Arguments
 
     [-v <level>|--verbosity <level>]
     Verbosity level for app. Not used currently.
+
+    [--verbose <level>]
+    Verbosity level for app. wrapper around verbosity arg of ChrisApp base.
 
     [--version]
     If specified, print version number and exit.

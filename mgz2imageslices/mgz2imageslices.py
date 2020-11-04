@@ -120,6 +120,14 @@ class Mgz2imgslices(ChrisApp):
         self.add_argument('--printElapsedTime', dest='printElapsedTime', type=bool, action='store_true',
                           default=False, optional=True, help='print program run time')
 
+        self.add_argument("--verbose",
+                            type        = str,
+                            optional    = True,
+                            help        = "verbosity level for app",
+                            dest        = 'verbose',
+                            default     = "1")
+        
+
     def show_man_page(self, ab_shortOnly=False):
         scriptName = os.path.basename(sys.argv[0])
         shortSynopsis = '''
@@ -285,6 +293,7 @@ class Mgz2imgslices(ChrisApp):
         try:
             options.inputDir = options.inputdir
             options.outputDir = options.outputdir
+            options.verbosity = options.verbose
             
             imgConverter = mgz2imgslices.object_factoryCreate(options).C_convert
 
