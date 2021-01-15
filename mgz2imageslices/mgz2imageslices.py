@@ -99,7 +99,7 @@ class Mgz2imgslices(ChrisApp):
                             default=False, optional=True, help='normalize the pixels of output image files')
 
         self.add_argument('-l', '--lookupTable', dest='lookupTable', type=str, 
-                            default='__val__', optional=True, help='reads name for the Label directories')
+                            default='__none__', optional=True, help='reads name for the Label directories')
 
         self.add_argument('-y', '--synopsis', dest='synopsis', type=bool, action='store_true',
                           default=False, optional=True, help='short synopsis')
