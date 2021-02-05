@@ -46,7 +46,7 @@ Synopsis
             [--version]                                                 \
             [-y] [--synopsis]                                           \
             <inputDir>                                                  \
-            <outputDir>  
+            <outputDir>
 
 Description
 -----------
@@ -55,7 +55,7 @@ Description
 
 For more detailed description, consult the documentation here https://github.com/FNNDSC/mgz2imgslices
 
-**NOTE:** 
+**NOTE:**
 
 In the instances where the input ``mgz`` volume voxel values are interpreted to imply *labels* (i.e. segmented cortical regions), this plugin can use the embedded  FreeSurfer ``FreeSurferColorLUT.txt`` file to map FreeSurfer *label* IDs to human readable cortical label strings in the naming of output directories.
 
@@ -107,13 +107,13 @@ Arguments
     the <LUTfile> to ``__val__``.
 
     While running the docker image, you can also pass ``__fs__`` which will use
-    the FreeSurferColorLUT.txt from within the docker container to perform a 
-    looktup on the filtered voxel label values according to the contents of 
+    the FreeSurferColorLUT.txt from within the docker container to perform a
+    looktup on the filtered voxel label values according to the contents of
     the FreeSurferColorLUT.txt
 
     [--skipAllLabels]
     Skips all labels and converts only the whole mgz volume to png/jpg images.
-    
+
     [-s|--skipLabelValueList <ListOfLabelNumbersToSkip>]
     If specified as a comma separated string of label numbers,
     will not create directories of those label numbers.
@@ -179,7 +179,7 @@ First, let's create a directory, say ``devel`` wherever you feel like it. We wil
     cd devel
     export DEVEL=$(pwd)
 
-Now, we need to fetch sample MGZ data. 
+Now, we need to fetch sample MGZ data.
 
 Pull MGZ data
 ~~~~~~~~~~~~~
@@ -232,7 +232,7 @@ Copy and modify the different commands below as needed:
         --skipLabelValueList 0,2                                \
         --normalize                                             \
         --saveImages                                            \
-        --wholeVolume entireVolume                              \    
+        --wholeVolume entireVolume                              \
         --verbosity 1                                           \
         /incoming /outgoing
 
