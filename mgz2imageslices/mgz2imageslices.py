@@ -58,7 +58,7 @@ class Mgz2imgslices(ChrisApp):
     TYPE                    = 'ds'
     DESCRIPTION             = 'An app to convert mgz volumes to numpy arrays and png image formats'
     DOCUMENTATION           = 'https://github.com/FNNDSC/pl-mgz2imgslices'
-    VERSION                 = '2.0.4'
+    VERSION                 = '2.0.6'
     ICON                    = '' # url of an icon image
     LICENSE                 = 'Opensource (MIT)'
     MAX_NUMBER_OF_WORKERS   = 1  # Override with integer value
@@ -223,7 +223,7 @@ class Mgz2imgslices(ChrisApp):
             [-y|--synopsis]
 
 
-        ''' % scriptName
+        '''
 
         description = '''
         DESCRIPTION
@@ -345,12 +345,12 @@ class Mgz2imgslices(ChrisApp):
 
             o See https://github.com/FNNDSC/mgz2imgslices for more help and source.
 
-                ''' % (scriptName)
+                '''
 
         if ab_shortOnly:
-            return shortSynopsis
+            print(shortSynopsis)
         else:
-            return shortSynopsis + description
+            print(shortSynopsis + description)
 
     def run(self, options):
         """
@@ -381,17 +381,12 @@ class Mgz2imgslices(ChrisApp):
             imgConverter.tic()
             imgConverter.run()
 
-            # if b_dicomExt:
-            #     break
-
             if options.printElapsedTime:
                 print("Elapsed time = %f seconds" % imgConverter.toc())
                 sys.exit(0)
 
         except Exception as e:
             traceback.print_exc()
-
-
 
 # ENTRYPOINT
 if __name__ == "__main__":
