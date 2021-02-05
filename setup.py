@@ -21,7 +21,7 @@ setup(
       name             =   'mgz2imgslices',
       # for best practices make this version the same as the VERSION class variable
       # defined in your ChrisApp-derived Python class
-      version          =   '2.0.0',
+      version          =   '2.0.4',
       description      =   'An app to ...',
       long_description =   readme(),
       author           =   'FNNDSC',

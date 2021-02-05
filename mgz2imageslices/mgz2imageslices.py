@@ -53,12 +53,12 @@ class Mgz2imgslices(ChrisApp):
     SELFPATH                = os.path.dirname(os.path.abspath(__file__))
     SELFEXEC                = os.path.basename(__file__)
     EXECSHELL               = 'python3'
-    TITLE                   = 'A ChRIS plugin app that converts mgz files to png or jpeg (with optional label color lookup).
+    TITLE                   = 'A ChRIS plugin app that converts mgz files to png or jpeg (with optional label color lookup).'
     CATEGORY                = ''
     TYPE                    = 'ds'
     DESCRIPTION             = 'An app to convert mgz volumes to numpy arrays and png image formats'
     DOCUMENTATION           = 'https://github.com/FNNDSC/pl-mgz2imgslices'
-    VERSION                 = '2.0.0'
+    VERSION                 = '2.0.4'
     ICON                    = '' # url of an icon image
     LICENSE                 = 'Opensource (MIT)'
     MAX_NUMBER_OF_WORKERS   = 1  # Override with integer value
