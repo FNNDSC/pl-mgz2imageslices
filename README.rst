@@ -200,7 +200,7 @@ Using ``docker run``
 
 To run using ``docker``, be sure to assign an "input" directory to ``/incoming`` and an output directory to ``/outgoing``. *Make sure that the* ``$(pwd)/out`` *directory is world writable!*
 
-- Make sure your current working directory is ``devel``. At this juncture it should contain `mgz_converter_dataset``.
+- Make sure your current working directory is ``devel``. At this juncture it should contain ``mgz_converter_dataset``.
 
 - Create an output directory named ``results`` in ``devel``.
 
@@ -236,6 +236,30 @@ Copy and modify the different commands below as needed:
         --verbosity 1                                           \
         /incoming /outgoing
 
+
+Debug
+-----
+
+To debug the containerized version of this plugin, simply volume map the source directories of the repo into the relevant locations of the container image:
+
+.. code:: bash
+
+    docker run -ti --rm -v $PWD/in:/incoming:ro -v $PWD/out:/outgoing:rw    \
+        -v $PWD/mgz2imageslices:/usr/local/lib/python3.8/dist-packages/mgz2imageslices:ro   \
+        fnndsc/pl-mgz2imageslices mgz2imageslices /incoming /outgoing
+
+To enter the container:
+
+.. code:: bash
+
+    docker run -ti --rm -v $PWD/in:/incoming:ro -v $PWD/out:/outgoing:rw    \
+        -v $PWD/mgz2imageslices:/usr/local/lib/python3.8/dist-packages/mgz2imageslices:ro   \
+        --entrypoint /bin/bash fnndsc/pl-mgz2imageslices
+
+Remember to use the ``-ti`` flag for interactivity!
+
+
+*30*
 
 
 
