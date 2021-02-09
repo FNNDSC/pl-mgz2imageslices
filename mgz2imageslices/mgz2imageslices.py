@@ -1,14 +1,14 @@
+#!/usr/bin/env python                                            
 #
-# S3 push DS app
+# mgz2imageslices ds ChRIS plugin app
 #
-# (c) 2016-2019 Fetal-Neonatal Neuroimaging & Developmental Science Center
+# (c) 2021 Fetal-Neonatal Neuroimaging & Developmental Science Center
 #                   Boston Children's Hospital
 #
 #              http://childrenshospital.org/FNNDSC/
 #                        dev@babyMRI.org
 #
 
-# Turn off all logging for modules in this libary.
 import logging
 logging.disable(logging.CRITICAL)
 
@@ -36,22 +36,28 @@ import time
 from chrisapp.base import ChrisApp
 from mgz2imgslices import mgz2imgslices
 
-class Mgz2imgslices(ChrisApp):
+
+Gstr_title = """
+                      _____ _                                 _ _               
+                     / __  (_)                               | (_)              
+ _ __ ___   __ _ ____`' / /'_ _ __ ___   __ _  __ _  ___  ___| |_  ___ ___  ___ 
+| '_ ` _ \ / _` |_  /  / / | | '_ ` _ \ / _` |/ _` |/ _ \/ __| | |/ __/ _ \/ __|
+| | | | | | (_| |/ / ./ /__| | | | | | | (_| | (_| |  __/\__ \ | | (_|  __/\__ \
+|_| |_| |_|\__, /___|\_____/_|_| |_| |_|\__,_|\__, |\___||___/_|_|\___\___||___/
+            __/ |                              __/ |                            
+           |___/                              |___/                             
+"""
+
+
+class Mgz2imageslices(ChrisApp):
     """
-    An app to ....
+    An app to ...
     """
-    AUTHORS                 = 'FNNDSC (dev@babyMRI.org)'
-    SELFPATH                = os.path.dirname(os.path.abspath(__file__))
-    SELFEXEC                = os.path.basename(__file__)
-    EXECSHELL               = 'python3'
-    TITLE                   = 'A ChRIS plugin app that converts mgz files to png or jpeg alongwith some special features that make it usable even as part of other project workflows.'
+    PACKAGE                 = __package__
+    TITLE                   = 'A ChRIS plugin app'
     CATEGORY                = ''
     TYPE                    = 'ds'
-    DESCRIPTION             = 'An app to convert mgz volumes to numpy arrays and png image formats'
-    DOCUMENTATION           = 'https://github.com/FNNDSC/pl-mgz2imgslices'
-    VERSION                 = '1.2'
     ICON                    = '' # url of an icon image
-    LICENSE                 = 'Opensource (MIT)'
     MAX_NUMBER_OF_WORKERS   = 1  # Override with integer value
     MIN_NUMBER_OF_WORKERS   = 1  # Override with integer value
     MAX_CPU_LIMIT           = '' # Override with millicore value as string, e.g. '2000m'
@@ -80,45 +86,101 @@ class Mgz2imgslices(ChrisApp):
         Use self.add_argument to specify a new app argument.
         """
 
-        self.add_argument('-i', '--inputFile', dest='inputFile', type=str,
-                          optional=False, help='name of the input file within the inputDir')
 
-        self.add_argument('-o', '--outputFileStem', dest='outputFileStem', type=str, optional=True,
-                          help='output file', default='sample')
+        self.add_argument('-i', '--inputFile', 
+                            dest        = 'inputFile', 
+                            type        = str,
+                            optional    = False, 
+                            help        = 'name of the input file within the inputDir')
 
-        self.add_argument('-t', '--outputFileType', dest='outputFileType', type=str,
-                          default='png', optional=True, help='output image file format')
+        self.add_argument('-o', '--outputFileStem', 
+                            dest        = 'outputFileStem', 
+                            type        = str, 
+                            optional    = True,
+                            help        = 'output file', 
+                            default     = 'sample')
 
-        self.add_argument('--saveImages', dest='saveImages', type=bool, action='store_true',
-                          default=False, optional=True, help='store png images for each slice of mgz file')
+        self.add_argument('-t', '--outputFileType', 
+                            dest        = 'outputFileType', 
+                            type        = str,
+                            default     = 'png', 
+                            optional    = True, 
+                            help        = 'output image file format')
 
-        self.add_argument('--label', dest='label', type=str,
-                          default='label', optional=True, help='prefix a label to all the label directories')
+        self.add_argument('--saveImages', 
+                            dest        = 'saveImages', 
+                            type        = bool, 
+                            action      = 'store_true',
+                            default     = False, 
+                            optional    = True, 
+                            help        = 'store png images for each slice of mgz file')
 
-        self.add_argument('-n', '--normalize', dest='normalize', type=bool, action='store_true',
-                            default=False, optional=True, help='normalize the pixels of output image files')
+        self.add_argument('--label', 
+                            dest        = 'label', 
+                            type        = str,
+                            default     = 'label', 
+                            optional    = True, 
+                            help        = 'prefix a label to all the label directories')
 
-        self.add_argument('-l', '--lookupTable', dest='lookupTable', type=str, 
-                            default='__val__', optional=True, help='reads name for the Label directories')
+        self.add_argument('-n', '--normalize', 
+                            dest        = 'normalize', 
+                            type        = bool, 
+                            action      = 'store_true',
+                            default     = False, 
+                            optional    = True, 
+                            help        = 'normalize the pixels of output image files')
 
-        self.add_argument('-y', '--synopsis', dest='synopsis', type=bool, action='store_true',
-                          default=False, optional=True, help='short synopsis')
+        self.add_argument('-l', '--lookupTable', 
+                            dest        = 'lookupTable', 
+                            type        = str, 
+                            default     = '__none__', 
+                            optional    = True, 
+                            help        = 'reads name for the Label directories')
 
-        self.add_argument('--skipAllLabels', dest='skipAllLabels', type=bool, action='store_true',
-                            default=False, optional=True, help='skip all labels and create only whole Volume images')
+        self.add_argument('-y', '--synopsis', 
+                            dest        = 'synopsis', 
+                            type        = bool, 
+                            action      = 'store_true',
+                            default     = False, 
+                            optional    = True, 
+                            help        = 'short synopsis')
 
-        self.add_argument('-s', '--skipLabelValueList', dest='skipLabelValueList', type=str, 
-                          default='', optional=True, help='Comma separated list of labels to skip')
+        self.add_argument('--skipAllLabels', 
+                            dest        = 'skipAllLabels', 
+                            type        = bool, 
+                            action      = 'store_true',
+                            default     = False, 
+                            optional    = True, 
+                            help        = 'skip all labels and create only whole Volume images')
 
-        self.add_argument('-f', '--filterLabelValueList', dest='filterLabelValueList', type=str, 
-                          default='-1', optional=True, help='Comma separated list of voxel values to include')
+        self.add_argument('-s', '--skipLabelValueList', 
+                            dest        = 'skipLabelValueList', 
+                            type        = str, 
+                            default     = '', 
+                            optional    = True, 
+                            help        = 'Comma separated list of labels to skip')
 
-        self.add_argument('-w', '--wholeVolume', dest='wholeVolume', type=str, 
-                          default="wholeVolume", optional=True, 
-                          help='Converts entire mgz volume to png/jpg instead of individually masked labels')
+        self.add_argument('-f', '--filterLabelValueList', 
+                            dest        = 'filterLabelValueList', 
+                            type        = str, 
+                            default     = '-1', 
+                            optional    = True, 
+                            help        = 'Comma separated list of voxel values to include')
+
+        self.add_argument('-w', '--wholeVolume', 
+                            dest        ='wholeVolume', 
+                            type        = str, 
+                            default     = "wholeVolume", 
+                            optional    = True, 
+                            help        = 'Converts entire mgz volume to png/jpg instead of individually masked labels')
              
-        self.add_argument('--printElapsedTime', dest='printElapsedTime', type=bool, action='store_true',
-                          default=False, optional=True, help='print program run time')
+        self.add_argument('--printElapsedTime', 
+                            dest        = 'printElapsedTime', 
+                            type        = bool, 
+                            action      = 'store_true',
+                            default     = False, 
+                            optional    = True, 
+                            help        = 'print program run time')
 
         self.add_argument("--verbose",
                             type        = str,
@@ -127,6 +189,41 @@ class Mgz2imgslices(ChrisApp):
                             dest        = 'verbose',
                             default     = "1")
         
+    def run(self, options):
+        """
+        Define the code to be run by this plugin app.
+        """
+        # The med2image module has slightly different variable
+        # names for the same concept... convert from the plugin
+        # name to the module name:
+
+        options.inputDir = options.inputdir
+        options.outputDir = options.outputdir
+        options.verbosity = options.verbose
+        
+        imgConverter = mgz2imgslices.object_factoryCreate(options).C_convert
+
+        if options.version:
+            print("Version: %s" % options.version)
+            sys.exit(1)
+
+        if options.man or options.synopsis:
+            if options.man:
+                str_help = self.show_man_page(False)
+            else:
+                str_help = self.show_man_page(True)
+            print(str_help)
+            sys.exit(1)
+
+        imgConverter.tic()
+        imgConverter.run()
+
+        # if b_dicomExt:
+        #     break
+
+        if options.printElapsedTime:
+            print("Elapsed time = %f seconds" % imgConverter.toc())
+            sys.exit(0)
 
     def show_man_page(self, ab_shortOnly=False):
         scriptName = os.path.basename(sys.argv[0])
@@ -286,45 +383,3 @@ class Mgz2imgslices(ChrisApp):
         else:
             return shortSynopsis + description
 
-    def run(self, options):
-        """
-        Define the code to be run by this plugin app.
-        """
-        try:
-            options.inputDir = options.inputdir
-            options.outputDir = options.outputdir
-            options.verbosity = options.verbose
-            
-            imgConverter = mgz2imgslices.object_factoryCreate(options).C_convert
-
-            if options.version:
-                print("Version: %s" % options.version)
-                sys.exit(1)
-
-            if options.man or options.synopsis:
-                if options.man:
-                    str_help = self.show_man_page(False)
-                else:
-                    str_help = self.show_man_page(True)
-                print(str_help)
-                sys.exit(1)
-
-            imgConverter.tic()
-            imgConverter.run()
-
-            # if b_dicomExt:
-            #     break
-
-            if options.printElapsedTime:
-                print("Elapsed time = %f seconds" % imgConverter.toc())
-                sys.exit(0)
-
-        except Exception as e:
-            traceback.print_exc()
-
-
-
-# ENTRYPOINT
-if __name__ == "__main__":
-    app = Mgz2imgslices()
-    app.launch()

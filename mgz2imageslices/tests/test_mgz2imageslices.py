@@ -1,15 +1,15 @@
 
 from unittest import TestCase
 from unittest import mock
-from mgz2imgslices.mgz2imgslices import Mgz2imgslices
+from mgz2imageslices.mgz2imageslices import Mgz2imageslices
 
 
-class Mgz2imgslicesTests(TestCase):
+class Mgz2imageslicesTests(TestCase):
     """
-    Test Mgz2imgslices.
+    Test Mgz2imageslices.
     """
     def setUp(self):
-        self.app = Mgz2imgslices()
+        self.app = Mgz2imageslices()
 
     def test_run(self):
         """
