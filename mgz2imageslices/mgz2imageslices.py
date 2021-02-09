@@ -28,10 +28,6 @@ from    pfmisc._colors      import  Colors
 from    pfmisc.debug        import  debug
 
 import time
-# from timer import Timer
-
-# tcore = Timer()
-# twholeapp = Timer()
 # import the Chris app superclass
 from chrisapp.base import ChrisApp
 from mgz2imgslices import mgz2imgslices
@@ -229,7 +225,9 @@ class Mgz2imageslices(ChrisApp):
         scriptName = os.path.basename(sys.argv[0])
         shortSynopsis = '''
         NAME
+
     	    pl-mgz2imgslices - convert mgz volumes to jpg/png/etc.
+
         SYNOPSIS
             -i|--inputFile <inputFile>                                  \\
             -d|--outputDir <outputDir>                                  \\
@@ -253,8 +251,8 @@ class Mgz2imageslices(ChrisApp):
             [--version]                                                 \\
             [-y|--synopsis]
 
-        
-        ''' % scriptName
+
+        '''
 
         description = '''
         DESCRIPTION
@@ -301,8 +299,8 @@ class Mgz2imageslices(ChrisApp):
             ".png" image files along with the numpy files.
 
             [--label <prefixForLabelDirectories>]
-            Prefixes the string <prefixForLabelDirectories> to each filtered 
-            directory name. This is mostly for possible downstream processing, 
+            Prefixes the string <prefixForLabelDirectories> to each filtered
+            directory name. This is mostly for possible downstream processing,
             allowing a subsequent operation to easily determine which of the output
             directories correspond to labels.
 
@@ -375,11 +373,11 @@ class Mgz2imageslices(ChrisApp):
         GITHUB
 
             o See https://github.com/FNNDSC/mgz2imgslices for more help and source.
-            
-                ''' % (scriptName)
-                
+
+                '''
+
         if ab_shortOnly:
-            return shortSynopsis
+            print(shortSynopsis)
         else:
-            return shortSynopsis + description
+            print(shortSynopsis + description)
 
