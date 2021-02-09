@@ -6,7 +6,7 @@ with open(path.join(path.dirname(path.abspath(__file__)), 'README.rst')) as f:
 
 setup(
     name             = 'mgz2imageslices',
-    version          = '1.0.0',
+    version          = '1.0.2',
     description      = 'An app to convert 3d mgz files to 2s slices of readable formats like PNG/JPEG',
     long_description = readme,
     author           = 'Arushi Vyas',
